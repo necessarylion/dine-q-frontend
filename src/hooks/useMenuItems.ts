@@ -216,7 +216,7 @@ interface GenerateDescriptionInput {
   restaurantId: number;
   name: string;
   category: string;
-  language: string;
+  images?: File[];
 }
 
 /**
@@ -225,10 +225,25 @@ interface GenerateDescriptionInput {
 export const useGenerateDescription = () => {
   return useMutation({
     mutationFn: async (input: GenerateDescriptionInput) => {
-      const { restaurantId, ...body } = input;
-      return api.post<{ description: string }>(
+      const { restaurantId, images, ...fields } = input;
+
+      const formData = new FormData();
+      formData.append("name", fields.name);
+      formData.append("category", fields.category);
+      if (images && images.length > 0) {
+        images.forEach((image) => {
+          formData.append("images", image);
+        });
+      }
+
+      return api.post<{ name: string; description: string; category_id: number }>(
         endpoints.menuItems.generateDescription(restaurantId),
-        body
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
     },
   });

@@ -228,6 +228,7 @@
     "imagesOptional": "ပုံများ (ရွေးချယ်နိုင်)",
     "uploadMoreImages": "ပုံထပ်ထည့်မည်",
     "uploadImages": "ပုံ ထည့်မည်",
+    "dropImages": "ပုံကို ဒီမှာ ချပါ",
     "imagesHint": "JPG, PNG, သို့ WebP။ တစ်ပုံလျှင် အများဆုံး 5MB။",
     "availableForOrder": "အော်ဒါအတွက် ရနိုင်",
     "updateItem": "မီနူး အပ်ဒိတ်လုပ်မည်",
@@ -236,6 +237,7 @@
     "searchMenu": "မီနူး ရှာ...",
     "addToOrder": "အော်ဒါထဲ ထည့်မည်",
     "useAI": "AI သုံးမည်",
+    "useAITooltip": "AI က အမည်၊ ဖော်ပြချက်နဲ့ အမျိုးအစား ရေးပေးမယ်",
     "generating": "ရေးနေတယ်...",
     "failedToGenerate": "ဖော်ပြချက် ရေးမရပါ"
   },

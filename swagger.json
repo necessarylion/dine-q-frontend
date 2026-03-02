@@ -1772,7 +1772,7 @@
                     }
                 ],
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -1790,23 +1790,29 @@
                         "required": true
                     },
                     {
-                        "description": "Menu item details",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validators.GenerateDescriptionInput"
-                        }
+                        "type": "string",
+                        "description": "Menu item name",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category name",
+                        "name": "category",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "Dish images (jpg, jpeg, png, webp, max 5MB each)",
+                        "name": "images",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/services.GenerateDescriptionResult"
                         }
                     },
                     "400": {
@@ -4157,6 +4163,20 @@
                 }
             }
         },
+        "services.GenerateDescriptionResult": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "services.MemberSummary": {
             "type": "object",
             "properties": {
@@ -4427,23 +4447,6 @@
                 "y": {
                     "type": "number",
                     "example": 200
-                }
-            }
-        },
-        "validators.GenerateDescriptionInput": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "category": {
-                    "type": "string"
-                },
-                "language": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },

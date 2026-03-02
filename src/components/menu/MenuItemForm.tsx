@@ -5,13 +5,14 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
   createMenuItemFormSchema,
   updateMenuItemFormSchema,
 } from "@/schemas/menu_item_schema";
 import type { MenuItem, Category } from "@/types";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -29,6 +30,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Upload01Icon, Delete02Icon, AiMagicIcon } from "@hugeicons/core-free-icons";
 import { useGenerateDescription } from "@/hooks/useMenuItems";
@@ -59,7 +65,7 @@ export const MenuItemForm = ({
   onCancel,
   isSubmitting = false,
 }: MenuItemFormProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const isEdit = !!menuItem;
   const generateDescription = useGenerateDescription();
   const schema = isEdit ? updateMenuItemFormSchema : createMenuItemFormSchema;
@@ -115,32 +121,69 @@ export const MenuItemForm = ({
   }, [menuItem, setValue]);
 
   const imagePreviews = allPreviews;
+  const [isDragging, setIsDragging] = useState(false);
+  const dragCounter = useRef(0);
+
+  const acceptedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+  const addFiles = useCallback((files: File[]) => {
+    const valid = files.filter((f) => acceptedTypes.includes(f.type));
+    if (valid.length === 0) return;
+
+    const readers = valid.map((file) => {
+      return new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(readers).then((previews) => {
+      setAllPreviews((prev) => [...prev, ...previews]);
+    });
+
+    setAllFiles((prev) => {
+      const updated = [...prev, ...valid];
+      setValue("images", updated);
+      return updated;
+    });
+  }, [setValue]);
 
   const handleImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (files.length > 0) {
-      // Create previews for new files
-      const readers = files.map((file) => {
-        return new Promise<string>((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.readAsDataURL(file);
-        });
-      });
-
-      Promise.all(readers).then((previews) => {
-        setAllPreviews((prev) => [...prev, ...previews]);
-      });
-
-      setAllFiles((prev) => {
-        const updated = [...prev, ...files];
-        setValue("images", updated);
-        return updated;
-      });
-    }
-    // Reset input so same file can be selected again
+    addFiles(files);
     e.target.value = "";
   };
+
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current++;
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current--;
+    if (dragCounter.current === 0) {
+      setIsDragging(false);
+    }
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current = 0;
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    addFiles(files);
+  }, [addFiles]);
 
   const handleRemoveImage = (index: number) => {
     setAllPreviews((prev) => prev.filter((_, i) => i !== index));
@@ -210,37 +253,7 @@ export const MenuItemForm = ({
 
       {/* Description */}
       <Field data-invalid={!!errors.description}>
-        <div className="flex items-center justify-between">
-          <FieldLabel>{t("menu.descriptionOptional")}</FieldLabel>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="h-6 text-xs gap-1"
-            disabled={generateDescription.isPending || !watch("name")}
-            onClick={() => {
-              const name = watch("name");
-              const categoryId = watch("category_id");
-              const category = categories.find((c) => c.id.toString() === categoryId);
-              generateDescription.mutate(
-                {
-                  restaurantId,
-                  name,
-                  category: category?.name || "",
-                  language: i18n.language,
-                },
-                {
-                  onSuccess: (data) => {
-                    setValue("description", data.description);
-                  },
-                }
-              );
-            }}
-          >
-            <HugeiconsIcon icon={AiMagicIcon} className="size-3" />
-            {generateDescription.isPending ? t("menu.generating") : t("menu.useAI")}
-          </Button>
-        </div>
+        <FieldLabel>{t("menu.descriptionOptional")}</FieldLabel>
         <FieldContent>
           <Textarea
             {...register("description")}
@@ -280,12 +293,25 @@ export const MenuItemForm = ({
             </div>
           )}
 
-          <label className="flex h-24 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25 bg-muted/50 hover:bg-muted/80 transition-colors">
-            <HugeiconsIcon icon={Upload01Icon} strokeWidth={2} className="size-6 text-muted-foreground" />
-            <span className="mt-2 text-xs text-muted-foreground">
-              {imagePreviews.length > 0
-                ? t("menu.uploadMoreImages")
-                : t("menu.uploadImages")}
+          <label
+            className={cn(
+              "flex h-24 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors",
+              isDragging
+                ? "border-primary bg-primary/10"
+                : "border-muted-foreground/25 bg-muted/50 hover:bg-muted/80"
+            )}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          >
+            <HugeiconsIcon icon={Upload01Icon} strokeWidth={2} className={cn("size-6", isDragging ? "text-primary" : "text-muted-foreground")} />
+            <span className={cn("mt-2 text-xs", isDragging ? "text-primary" : "text-muted-foreground")}>
+              {isDragging
+                ? t("menu.dropImages")
+                : imagePreviews.length > 0
+                  ? t("menu.uploadMoreImages")
+                  : t("menu.uploadImages")}
             </span>
             <input
               type="file"
@@ -335,6 +361,41 @@ export const MenuItemForm = ({
         <Button type="button" variant="outline" onClick={onCancel}>
           {t("common.cancel")}
         </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              className="ml-auto"
+              disabled={generateDescription.isPending || (!watch("name") && !watch("images")?.length)}
+              onClick={() => {
+                const name = watch("name");
+                const categoryId = watch("category_id");
+                const category = categories.find((c) => c.id.toString() === categoryId);
+                const images = watch("images");
+                generateDescription.mutate(
+                  {
+                    restaurantId,
+                    name,
+                    category: category?.name || "",
+                    images,
+                  },
+                  {
+                    onSuccess: (data) => {
+                      if (data.name) setValue("name", data.name);
+                      if (data.description) setValue("description", data.description);
+                      if (data.category_id) setValue("category_id", data.category_id.toString());
+                    },
+                  }
+                );
+              }}
+            >
+              <HugeiconsIcon icon={AiMagicIcon} className="size-4" />
+              {generateDescription.isPending ? t("menu.generating") : t("menu.useAI")}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{t("menu.useAITooltip")}</TooltipContent>
+        </Tooltip>
       </div>
     </form>
   );

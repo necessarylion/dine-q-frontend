@@ -228,6 +228,7 @@
     "imagesOptional": "Images (Optional)",
     "uploadMoreImages": "Upload More Images",
     "uploadImages": "Upload Images",
+    "dropImages": "Drop images here",
     "imagesHint": "JPG, PNG, or WebP. Max 5MB each. Multiple images allowed.",
     "availableForOrder": "Available for order",
     "updateItem": "Update Item",
@@ -236,6 +237,7 @@
     "searchMenu": "Search menu...",
     "addToOrder": "Add to Order",
     "useAI": "Use AI",
+    "useAITooltip": "AI generates name, description, and category",
     "generating": "Generating...",
     "failedToGenerate": "Failed to generate description"
   },
