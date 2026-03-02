@@ -82,6 +82,8 @@ const buildRestaurantFormData = (
     formData.append("tax_percent", String(data.tax_percent));
   if (data.remove_decimal !== undefined)
     formData.append("remove_decimal", String(data.remove_decimal));
+  if (data.ai_menu_language)
+    formData.append("ai_menu_language", data.ai_menu_language);
   return formData;
 };
 

@@ -421,6 +421,8 @@
     "languageDescription": "Wählen Sie Ihre bevorzugte Sprache",
     "english": "English (Englisch)",
     "burmese": "Myanmar (Birmanisch)",
-    "german": "Deutsch"
+    "german": "Deutsch",
+    "aiMenuLanguage": "KI-Menüsprache",
+    "aiMenuLanguageDescription": "Sprache, die KI für Menünamen und Beschreibungen verwendet"
   }
 }

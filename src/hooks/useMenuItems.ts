@@ -216,6 +216,7 @@ interface GenerateDescriptionInput {
   restaurantId: number;
   name: string;
   category: string;
+  description?: string;
   images?: File[];
 }
 
@@ -230,6 +231,7 @@ export const useGenerateDescription = () => {
       const formData = new FormData();
       formData.append("name", fields.name);
       formData.append("category", fields.category);
+      if (fields.description) formData.append("description", fields.description);
       if (images && images.length > 0) {
         images.forEach((image) => {
           formData.append("images", image);

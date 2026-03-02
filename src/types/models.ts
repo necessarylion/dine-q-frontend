@@ -56,6 +56,7 @@ export interface Restaurant {
   booking_window_end_hours: number;
   tax_percent: number;
   remove_decimal: boolean;
+  ai_menu_language: string;
   created_at: string;
   updated_at: string;
   members?: RestaurantMember[];

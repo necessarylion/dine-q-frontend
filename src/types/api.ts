@@ -40,6 +40,7 @@ export interface CreateRestaurantInput {
   booking_window_end_hours?: number;
   tax_percent?: number;
   remove_decimal?: boolean;
+  ai_menu_language?: string;
 }
 
 export interface UpdateRestaurantInput {
@@ -52,6 +53,7 @@ export interface UpdateRestaurantInput {
   booking_window_end_hours?: number;
   tax_percent?: number;
   remove_decimal?: boolean;
+  ai_menu_language?: string;
 }
 
 // Category API types

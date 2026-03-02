@@ -95,7 +95,7 @@ export const MenuItemForm = ({
   });
 
   // All images as File objects (existing converted from URL + newly added)
-  const [, setAllFiles] = useState<File[]>([]);
+  const [allFiles, setAllFiles] = useState<File[]>([]);
   const [allPreviews, setAllPreviews] = useState<string[]>([]);
   const existingConverted = useRef(false);
 
@@ -367,18 +367,19 @@ export const MenuItemForm = ({
               type="button"
               variant="outline"
               className="ml-auto"
-              disabled={generateDescription.isPending || (!watch("name") && !watch("images")?.length)}
+              disabled={generateDescription.isPending || (!watch("name") && !allFiles.length)}
               onClick={() => {
                 const name = watch("name");
                 const categoryId = watch("category_id");
                 const category = categories.find((c) => c.id.toString() === categoryId);
-                const images = watch("images");
+                const description = watch("description");
                 generateDescription.mutate(
                   {
                     restaurantId,
                     name,
                     category: category?.name || "",
-                    images,
+                    description: description || undefined,
+                    images: allFiles.length > 0 ? allFiles : undefined,
                   },
                   {
                     onSuccess: (data) => {

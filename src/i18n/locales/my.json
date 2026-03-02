@@ -421,6 +421,8 @@
     "languageDescription": "သင်နှစ်သက်ရာ ဘာသာစကား ရွေးပါ",
     "english": "English (အင်္ဂလိပ်)",
     "burmese": "မြန်မာ",
-    "german": "Deutsch (ဂျာမန်)"
+    "german": "Deutsch (ဂျာမန်)",
+    "aiMenuLanguage": "AI မီနူး ဘာသာစကား",
+    "aiMenuLanguageDescription": "AI က မီနူးအမည်နဲ့ ဖော်ပြချက်တွေ ရေးတဲ့အခါ သုံးမယ့် ဘာသာစကား"
   }
 }

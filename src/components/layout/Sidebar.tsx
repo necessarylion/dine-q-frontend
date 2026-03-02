@@ -19,7 +19,7 @@ import {
   SidebarRight01Icon,
   UserGroupIcon,
   Mail01Icon,
-  LanguageSkillIcon,
+  Settings01Icon,
 } from "@hugeicons/core-free-icons";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
@@ -63,7 +63,7 @@ const sidebarSections: SidebarSection[] = [
     items: [
       { to: "/dashboard/restaurants", label: "sidebar.restaurants", icon: Store01Icon },
       { to: "/dashboard/members", label: "sidebar.members", icon: UserGroupIcon, requiresRestaurant: true },
-      { to: "/dashboard/settings", label: "sidebar.languageSettings", icon: LanguageSkillIcon, requiresRestaurant: false },
+      { to: "/dashboard/settings", label: "sidebar.settings", icon: Settings01Icon, requiresRestaurant: false },
     ],
   },
 ];

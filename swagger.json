@@ -541,6 +541,12 @@
                         "description": "Booking window end hours (default 2)",
                         "name": "booking_window_end_hours",
                         "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "AI menu generation language (default English)",
+                        "name": "ai_menu_language",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -674,6 +680,12 @@
                         "type": "integer",
                         "description": "Booking window end hours (default 2)",
                         "name": "booking_window_end_hours",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "AI menu generation language (default English)",
+                        "name": "ai_menu_language",
                         "in": "formData"
                     }
                 ],
@@ -1799,6 +1811,12 @@
                         "type": "string",
                         "description": "Category name",
                         "name": "category",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Rough description or notes about the dish",
+                        "name": "description",
                         "in": "formData"
                     },
                     {
@@ -3825,6 +3843,10 @@
                 "address": {
                     "type": "string",
                     "example": "123 Main St"
+                },
+                "ai_menu_language": {
+                    "type": "string",
+                    "example": "English"
                 },
                 "booking_window_end_hours": {
                     "type": "integer",
