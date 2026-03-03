@@ -1,8 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api/client";
 import { endpoints } from "@/lib/api/endpoints";
-import type { AISetting } from "@/types";
+import { useRestaurantStore } from "@/stores/restaurantStore";
+import type { AISetting, Restaurant } from "@/types";
 import type { CreateAISettingInput, UpdateAISettingInput } from "@/types";
+
+const refreshCurrentRestaurant = async (restaurantId: number) => {
+  const restaurant = await api.get<Restaurant>(endpoints.restaurants.get(restaurantId));
+  const { currentRestaurant, setCurrentRestaurant } = useRestaurantStore.getState();
+  if (currentRestaurant?.id === restaurantId) {
+    setCurrentRestaurant(restaurant);
+  }
+};
 
 export const useAISettings = (restaurantId: number | undefined) => {
   return useQuery({
@@ -30,6 +39,7 @@ export const useCreateAISetting = () => {
       queryClient.invalidateQueries({
         queryKey: ["aiSettings", variables.restaurantId],
       });
+      refreshCurrentRestaurant(variables.restaurantId);
     },
   });
 };
@@ -56,6 +66,7 @@ export const useUpdateAISetting = () => {
       queryClient.invalidateQueries({
         queryKey: ["aiSettings", variables.restaurantId],
       });
+      refreshCurrentRestaurant(variables.restaurantId);
     },
   });
 };
@@ -77,6 +88,7 @@ export const useDeleteAISetting = () => {
       queryClient.invalidateQueries({
         queryKey: ["aiSettings", variables.restaurantId],
       });
+      refreshCurrentRestaurant(variables.restaurantId);
     },
   });
 };

@@ -52,6 +52,7 @@ export const endpoints = {
   menuItems: {
     list: (restaurantId: number) => `/restaurants/${restaurantId}/menu-items`,
     guestList: (restaurantId: number) => `/guest/restaurants/${restaurantId}/menu-items`,
+    guestAISearch: (restaurantId: number) => `/guest/restaurants/${restaurantId}/menu-items/ai-search`,
     create: (restaurantId: number) => `/restaurants/${restaurantId}/menu-items`,
     get: (restaurantId: number, itemId: number) =>
       `/restaurants/${restaurantId}/menu-items/${itemId}`,

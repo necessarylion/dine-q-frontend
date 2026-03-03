@@ -27,6 +27,7 @@ import {
   ArrowLeft02Icon,
   ArrowRight02Icon,
   ViewIcon,
+  AiMagicIcon,
 } from "@hugeicons/core-free-icons";
 import type { MenuItem, Category } from "@/types";
 import { formatPrice } from "@/lib/utils";
@@ -95,6 +96,10 @@ interface MenuBrowserProps {
   onSearchChange: (value: string) => void;
   selectedCategory: string;
   onCategoryChange: (value: string) => void;
+  aiEnabled?: boolean;
+  onAIToggle?: (enabled: boolean) => void;
+  onSearchSubmit?: () => void;
+  aiSearchLoading?: boolean;
 }
 
 export const MenuBrowser = ({
@@ -107,6 +112,10 @@ export const MenuBrowser = ({
   onSearchChange,
   selectedCategory,
   onCategoryChange,
+  aiEnabled,
+  onAIToggle,
+  onSearchSubmit,
+  aiSearchLoading,
 }: MenuBrowserProps) => {
   const { t } = useTranslation();
   const [detailItem, setDetailItem] = useState<MenuItem | null>(null);
@@ -138,24 +147,54 @@ export const MenuBrowser = ({
           className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground"
         />
         <Input
-          placeholder={t("menu.searchMenu")}
+          placeholder={aiEnabled ? t("menu.aiSearchMenu") : t("menu.searchMenu")}
           value={searchInput}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-9 pr-9"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && aiEnabled && onSearchSubmit) {
+              e.preventDefault();
+              onSearchSubmit();
+            }
+          }}
+          className={`pl-9 ${onAIToggle ? (searchInput ? "pr-16" : "pr-9") : (searchInput ? "pr-9" : "")}`}
         />
-        {searchInput && (
-          <button
-            type="button"
-            onClick={() => onSearchChange("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          >
-            <HugeiconsIcon
-              icon={Cancel01Icon}
-              strokeWidth={2}
-              className="size-4"
-            />
-          </button>
-        )}
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => onSearchChange("")}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <HugeiconsIcon
+                icon={Cancel01Icon}
+                strokeWidth={2}
+                className="size-4"
+              />
+            </button>
+          )}
+          {onAIToggle && (
+            <button
+              type="button"
+              onClick={() => onAIToggle(!aiEnabled)}
+              className={`rounded-md p-1 transition-colors ${
+                aiEnabled
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              title={aiEnabled ? t("menu.aiSearchOn") : t("menu.aiSearchOff")}
+            >
+              {aiSearchLoading ? (
+                <span className="size-4 block animate-spin rounded-full border-2 border-current border-t-transparent" />
+              ) : (
+                <HugeiconsIcon
+                  icon={AiMagicIcon}
+                  strokeWidth={2}
+                  className="size-4"
+                />
+              )}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Category Tabs */}
@@ -191,7 +230,18 @@ export const MenuBrowser = ({
       )}
 
       {/* Menu Items Grid */}
-      {filteredMenuItems.length === 0 ? (
+      {aiSearchLoading ? (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <div className="flex flex-col items-center gap-3">
+              <span className="size-6 block animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <p className="text-muted-foreground">
+                {t("menu.aiSearching")}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      ) : filteredMenuItems.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground">

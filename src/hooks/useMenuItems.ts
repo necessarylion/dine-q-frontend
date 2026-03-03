@@ -62,6 +62,39 @@ export const useGuestMenuItems = (
 };
 
 /**
+ * AI-powered search for guest menu items
+ */
+export const useGuestAISearchMenuItems = (
+  restaurantId: number | undefined,
+  token: string | undefined,
+  query?: string
+) => {
+  return useQuery({
+    queryKey: ["guestAISearchMenuItems", restaurantId, token, query],
+    queryFn: async () => {
+      const url = new URL(
+        `${import.meta.env.VITE_API_BASE_URL}${endpoints.menuItems.guestAISearch(restaurantId!)}`
+      );
+      if (query) {
+        url.searchParams.set("q", query);
+      }
+      const response = await fetch(url.toString(), {
+        headers: {
+          "X-Order-Token": token!,
+        },
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to search menu items");
+      }
+      return response.json() as Promise<MenuItem[]>;
+    },
+    placeholderData: keepPreviousData,
+    enabled: !!restaurantId && !!token && !!query,
+  });
+};
+
+/**
  * Fetch a single menu item by ID
  */
 export const useMenuItem = (

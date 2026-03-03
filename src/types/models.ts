@@ -57,6 +57,7 @@ export interface Restaurant {
   tax_percent: number;
   remove_decimal: boolean;
   ai_menu_language: string;
+  ai_setup: boolean;
   created_at: string;
   updated_at: string;
   members?: RestaurantMember[];
