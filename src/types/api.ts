@@ -204,8 +204,8 @@ export interface UpdateMemberRoleInput {
 export interface CreateAISettingInput {
   name: string;
   base_url: string;
-  model: string;
-  vision_model: string;
+  model?: string;
+  vision_model?: string;
   api_key: string;
   is_active?: boolean;
 }
@@ -213,8 +213,8 @@ export interface CreateAISettingInput {
 export interface UpdateAISettingInput {
   name: string;
   base_url: string;
-  model: string;
-  vision_model: string;
+  model?: string;
+  vision_model?: string;
   api_key?: string;
   is_active?: boolean;
 }
