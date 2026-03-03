@@ -367,7 +367,7 @@ export const MenuItemForm = ({
               type="button"
               variant="outline"
               className="ml-auto"
-              disabled={generateDescription.isPending || (!watch("name") && !allFiles.length)}
+              disabled={generateDescription.isPending || (!watch("name") && !allFiles.length && !allPreviews.length)}
               onClick={() => {
                 const name = watch("name");
                 const categoryId = watch("category_id");
