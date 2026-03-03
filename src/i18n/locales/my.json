@@ -35,7 +35,8 @@
     "phone": "ဖုန်း",
     "notes": "မှတ်ချက်",
     "download": "ဒေါင်းလုဒ်",
-    "print": "ပရင့်ထုတ်"
+    "print": "ပရင့်ထုတ်",
+    "back": "နောက်သို့"
   },
   "auth": {
     "restaurantOrdering": "စားသောက်ဆိုင် အော်ဒါစနစ်",
@@ -464,6 +465,33 @@
     "selectModel": "Model ရွေးပါ...",
     "aiSettingRequired": "AI ဆက်တင် လိုအပ်ပါတယ်",
     "aiSettingRequiredDescription": "Active ဖြစ်တဲ့ AI ဆက်တင် မရှိပါ။ Settings မှာ AI provider အရင် သတ်မှတ်ပေးပါ။",
-    "goToAISettings": "AI Settings သို့သွားမယ်"
+    "goToAISettings": "AI Settings သို့သွားမယ်",
+    "userProfile": "အသုံးပြုသူ ပရိုဖိုင်",
+    "updateName": "အမည် ပြောင်းမည်",
+    "updateNameDescription": "သင့်အမည် ပြောင်းလဲပါ",
+    "name": "အမည်",
+    "profileUpdated": "ပရိုဖိုင် အပ်ဒိတ်ပြီး",
+    "profileUpdatedDescription": "သင့်အမည် အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ။",
+    "failedToUpdateProfile": "ပရိုဖိုင် အပ်ဒိတ် မအောင်မြင်ပါ",
+    "changePassword": "စကားဝှက် ပြောင်းမည်",
+    "changePasswordDescription": "သင့်အကောင့် စကားဝှက် ပြောင်းပါ",
+    "currentPassword": "လက်ရှိ စကားဝှက်",
+    "newPassword": "စကားဝှက်အသစ်",
+    "passwordRule": "အနည်းဆုံး ၈ လုံး၊ စာလုံးအကြီး၊ စာလုံးအသေး နှင့် ဂဏန်း ပါရမယ်",
+    "passwordChanged": "စကားဝှက် ပြောင်းပြီး",
+    "passwordChangedDescription": "သင့်စကားဝှက် အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ။",
+    "failedToChangePassword": "စကားဝှက် ပြောင်းမှု မအောင်မြင်ပါ",
+    "changeEmail": "အီးမေးလ် ပြောင်းမည်",
+    "changeEmailDescription": "သင့်အကောင့် အီးမေးလ် ပြောင်းပါ",
+    "currentEmail": "လက်ရှိ အီးမေးလ်",
+    "newEmail": "အီးမေးလ်အသစ်",
+    "sendOtp": "OTP ပို့မည်",
+    "otp": "OTP ကုဒ်",
+    "otpDescription": "သင့်အီးမေးလ်အသစ်သို့ ဂဏန်း ၆ လုံး အတည်ပြုကုဒ် ပို့ပြီးပါပြီ။",
+    "verifyOtp": "အတည်ပြုမည်",
+    "emailChanged": "အီးမေးလ် ပြောင်းပြီး",
+    "emailChangedDescription": "သင့်အီးမေးလ် အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ။ အီးမေးလ်အသစ်ကို verify လုပ်ပေးပါ။",
+    "failedToChangeEmail": "အတည်ပြုကုဒ် ပို့မှု မအောင်မြင်ပါ",
+    "failedToVerifyOtp": "OTP အတည်ပြုမှု မအောင်မြင်ပါ"
   }
 }

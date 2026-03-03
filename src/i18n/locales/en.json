@@ -35,7 +35,8 @@
     "phone": "Phone",
     "notes": "Notes",
     "download": "Download",
-    "print": "Print"
+    "print": "Print",
+    "back": "Back"
   },
   "auth": {
     "restaurantOrdering": "Restaurant Ordering",
@@ -464,6 +465,33 @@
     "selectModel": "Select a model...",
     "aiSettingRequired": "AI Setting Required",
     "aiSettingRequiredDescription": "No active AI setting found. Please configure an AI provider in settings first.",
-    "goToAISettings": "Go to AI Settings"
+    "goToAISettings": "Go to AI Settings",
+    "userProfile": "User Profile",
+    "updateName": "Update Name",
+    "updateNameDescription": "Change your display name",
+    "name": "Name",
+    "profileUpdated": "Profile Updated",
+    "profileUpdatedDescription": "Your name has been updated successfully.",
+    "failedToUpdateProfile": "Failed to update profile",
+    "changePassword": "Change Password",
+    "changePasswordDescription": "Update your account password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "passwordRule": "Minimum 8 characters, must include uppercase, lowercase, and a digit",
+    "passwordChanged": "Password Changed",
+    "passwordChangedDescription": "Your password has been changed successfully.",
+    "failedToChangePassword": "Failed to change password",
+    "changeEmail": "Change Email",
+    "changeEmailDescription": "Update your account email address",
+    "currentEmail": "Current Email",
+    "newEmail": "New Email",
+    "sendOtp": "Send OTP",
+    "otp": "OTP Code",
+    "otpDescription": "A 6-digit verification code has been sent to your new email address.",
+    "verifyOtp": "Verify",
+    "emailChanged": "Email Changed",
+    "emailChangedDescription": "Your email has been updated successfully. Please verify your new email.",
+    "failedToChangeEmail": "Failed to send verification code",
+    "failedToVerifyOtp": "Failed to verify OTP"
   }
 }

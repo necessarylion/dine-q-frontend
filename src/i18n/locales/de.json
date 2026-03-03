@@ -35,7 +35,8 @@
     "phone": "Telefon",
     "notes": "Notizen",
     "download": "Herunterladen",
-    "print": "Drucken"
+    "print": "Drucken",
+    "back": "Zurück"
   },
   "auth": {
     "restaurantOrdering": "Restaurant-Bestellsystem",
@@ -464,6 +465,33 @@
     "selectModel": "Modell auswählen...",
     "aiSettingRequired": "KI-Einstellung erforderlich",
     "aiSettingRequiredDescription": "Keine aktive KI-Einstellung gefunden. Bitte konfigurieren Sie zuerst einen KI-Anbieter in den Einstellungen.",
-    "goToAISettings": "Zu KI-Einstellungen"
+    "goToAISettings": "Zu KI-Einstellungen",
+    "userProfile": "Benutzerprofil",
+    "updateName": "Name ändern",
+    "updateNameDescription": "Ändern Sie Ihren Anzeigenamen",
+    "name": "Name",
+    "profileUpdated": "Profil aktualisiert",
+    "profileUpdatedDescription": "Ihr Name wurde erfolgreich aktualisiert.",
+    "failedToUpdateProfile": "Profil konnte nicht aktualisiert werden",
+    "changePassword": "Passwort ändern",
+    "changePasswordDescription": "Aktualisieren Sie Ihr Kontopasswort",
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "passwordRule": "Mindestens 8 Zeichen, muss Groß-, Kleinbuchstaben und eine Ziffer enthalten",
+    "passwordChanged": "Passwort geändert",
+    "passwordChangedDescription": "Ihr Passwort wurde erfolgreich geändert.",
+    "failedToChangePassword": "Passwort konnte nicht geändert werden",
+    "changeEmail": "E-Mail ändern",
+    "changeEmailDescription": "Aktualisieren Sie Ihre Konto-E-Mail-Adresse",
+    "currentEmail": "Aktuelle E-Mail",
+    "newEmail": "Neue E-Mail",
+    "sendOtp": "OTP senden",
+    "otp": "OTP-Code",
+    "otpDescription": "Ein 6-stelliger Bestätigungscode wurde an Ihre neue E-Mail-Adresse gesendet.",
+    "verifyOtp": "Bestätigen",
+    "emailChanged": "E-Mail geändert",
+    "emailChangedDescription": "Ihre E-Mail wurde erfolgreich aktualisiert. Bitte bestätigen Sie Ihre neue E-Mail.",
+    "failedToChangeEmail": "Bestätigungscode konnte nicht gesendet werden",
+    "failedToVerifyOtp": "OTP konnte nicht bestätigt werden"
   }
 }

@@ -12,6 +12,10 @@ export const endpoints = {
     me: "/auth/user",
     verifyEmail: "/auth/verify-email",
     resendVerification: "/auth/resend-verification",
+    profile: "/auth/profile",
+    password: "/auth/password",
+    changeEmail: "/auth/change-email",
+    verifyChangeEmail: "/auth/change-email/verify",
   },
 
   restaurants: {

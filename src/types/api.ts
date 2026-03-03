@@ -29,6 +29,24 @@ export interface TokenResponse {
   access_token: string;
 }
 
+// User Profile API types
+export interface UpdateProfileInput {
+  name: string;
+}
+
+export interface ChangePasswordInput {
+  current_password: string;
+  new_password: string;
+}
+
+export interface ChangeEmailInput {
+  new_email: string;
+}
+
+export interface VerifyChangeEmailInput {
+  otp: string;
+}
+
 // Restaurant API types
 export interface CreateRestaurantInput {
   name: string;

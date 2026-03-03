@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AISettingsTab } from "@/components/settings/AISettingsTab";
+import { UserProfileTab } from "@/components/settings/UserProfileTab";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Settings01Icon, AiMagicIcon } from "@hugeicons/core-free-icons";
+import { Settings01Icon, AiMagicIcon, UserIcon } from "@hugeicons/core-free-icons";
 
 const languages = [
   { code: "en", label: "settings.english", flag: "🇺🇸" },
@@ -33,7 +34,8 @@ export const SettingsPage = () => {
   const { t, i18n } = useTranslation();
   const { currentRestaurant, setCurrentRestaurant } = useRestaurant();
   const updateRestaurant = useUpdateRestaurant();
-  const activeTab = searchParams.get("tab") === "ai" && currentRestaurant ? "ai" : "general";
+  const tabParam = searchParams.get("tab");
+  const activeTab = tabParam === "profile" ? "profile" : tabParam === "ai" && currentRestaurant ? "ai" : "general";
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -78,6 +80,10 @@ export const SettingsPage = () => {
           <TabsTrigger value="general" className="gap-1.5">
             <HugeiconsIcon icon={Settings01Icon} strokeWidth={2} className="size-3.5" />
             {t("settings.general")}
+          </TabsTrigger>
+          <TabsTrigger value="profile" className="gap-1.5">
+            <HugeiconsIcon icon={UserIcon} strokeWidth={2} className="size-3.5" />
+            {t("settings.userProfile")}
           </TabsTrigger>
           {currentRestaurant && (
             <TabsTrigger value="ai" className="gap-1.5">
@@ -161,6 +167,10 @@ export const SettingsPage = () => {
               </Card>
             )}
           </div>
+        </TabsContent>
+
+        <TabsContent value="profile">
+          <UserProfileTab />
         </TabsContent>
 
         {currentRestaurant && (
