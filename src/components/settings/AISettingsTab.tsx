@@ -504,7 +504,7 @@ function EditAISettingDialog({
                 {models.length > 0 ? (
                   <ModelCombobox
                     models={models}
-                    value={modelValue}
+                    value={modelValue ?? '-'}
                     onValueChange={(v) => setValue("model", v)}
                     placeholder={t("settings.selectModel")}
                   />
@@ -521,7 +521,7 @@ function EditAISettingDialog({
                 {models.length > 0 ? (
                   <ModelCombobox
                     models={models}
-                    value={visionModelValue}
+                    value={visionModelValue ?? '-'}
                     onValueChange={(v) => setValue("vision_model", v)}
                     placeholder={t("settings.selectModel")}
                   />
