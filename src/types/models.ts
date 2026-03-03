@@ -276,6 +276,11 @@ export interface DashboardResponse {
   daily_orders: DailyOrderStat[];
 }
 
+export interface DashboardInsightsResult {
+  summary: string;
+  insights: string[];
+}
+
 // Frontend-specific types
 export interface CartItem {
   menu_item: MenuItem;

@@ -121,7 +121,11 @@
     "last30days": "Last 30 days",
     "thisMonth": "This Month",
     "lastMonth": "Last Month",
-    "pickDateRange": "Pick a date range"
+    "pickDateRange": "Pick a date range",
+    "aiInsights": "AI Insights",
+    "generatingInsights": "Generating insights...",
+    "summary": "Summary",
+    "insights": "Insights"
   },
   "restaurant": {
     "myRestaurants": "My Restaurants",

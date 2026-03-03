@@ -121,7 +121,11 @@
     "last30days": "လွန်ခဲ့သော ၃၀ ရက်",
     "thisMonth": "ဒီလ",
     "lastMonth": "ပြီးခဲ့သောလ",
-    "pickDateRange": "ရက်အပိုင်းအခြား ရွေးပါ"
+    "pickDateRange": "ရက်အပိုင်းအခြား ရွေးပါ",
+    "aiInsights": "AI ထိုးထွင်းအမြင်",
+    "generatingInsights": "ထိုးထွင်းအမြင်များ ဖန်တီးနေသည်...",
+    "summary": "အကျဉ်းချုပ်",
+    "insights": "ထိုးထွင်းအမြင်များ"
   },
   "restaurant": {
     "myRestaurants": "ကျွန်တော့် စားသောက်ဆိုင်များ",

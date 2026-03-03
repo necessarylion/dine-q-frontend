@@ -23,6 +23,7 @@ import {
 } from "recharts";
 import { useRestaurant } from "@/hooks/useRestaurant";
 import { useDashboard } from "@/hooks/useDashboard";
+import { useDashboardInsights } from "@/hooks/useDashboardInsights";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ErrorCard } from "@/components/ErrorCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +31,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ShoppingBasket01Icon,
@@ -43,8 +51,10 @@ import {
   TaxesIcon,
   Discount01Icon,
   CreditCardIcon,
+  AiMagicIcon,
 } from "@hugeicons/core-free-icons";
 import { formatPrice } from "@/lib/utils";
+import { LANGUAGE_MAP } from "@/constants";
 
 const PRESET_RANGES = [
   { label: "common.today", getDates: () => ({ from: new Date(), to: new Date() }) },
@@ -71,7 +81,7 @@ const ORDER_TYPE_COLORS: Record<string, string> = {
 };
 
 export const DashboardPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { currentRestaurant } = useRestaurant();
   const [activePreset, setActivePreset] = useState(2); // Last 30 days default
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -79,6 +89,9 @@ export const DashboardPage = () => {
     to: new Date(),
   });
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [insightsOpen, setInsightsOpen] = useState(false);
+
+  const insightsMutation = useDashboardInsights();
 
   const currency = currentRestaurant?.currency || "USD";
 
@@ -152,6 +165,17 @@ export const DashboardPage = () => {
       }));
   }, [data?.bookings?.by_status]);
 
+  const handleGenerateInsights = () => {
+    if (!currentRestaurant) return;
+    setInsightsOpen(true);
+    insightsMutation.mutate({
+      restaurantId: currentRestaurant.id,
+      dateFrom,
+      dateTo,
+      language: LANGUAGE_MAP[i18n.language] || "English",
+    });
+  };
+
   if (!currentRestaurant) {
     return <ErrorCard title={t("common.noRestaurant")} message={t("common.selectRestaurantFirst")} />;
   }
@@ -172,9 +196,20 @@ export const DashboardPage = () => {
             {t(preset.label)}
           </Button>
         ))}
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={handleGenerateInsights}
+            disabled={!data || insightsMutation.isPending}
+          >
+            <HugeiconsIcon icon={AiMagicIcon} strokeWidth={2} className="size-4" />
+            {t("dashboard.aiInsights")}
+          </Button>
         <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="ml-auto gap-2">
+            <Button variant="outline" size="sm" className="gap-2">
               <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" />
               {dateLabel}
             </Button>
@@ -189,6 +224,7 @@ export const DashboardPage = () => {
             />
           </PopoverContent>
         </Popover>
+        </div>
       </div>
 
       {isLoading ? (
@@ -466,6 +502,59 @@ export const DashboardPage = () => {
           </div>
         </>
       ) : null}
+
+      {/* AI Insights Dialog */}
+      <Dialog open={insightsOpen} onOpenChange={setInsightsOpen}>
+        <DialogContent className="sm:max-w-lg max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <HugeiconsIcon icon={AiMagicIcon} strokeWidth={2} className="size-4" />
+              {t("dashboard.aiInsights")}
+            </DialogTitle>
+          </DialogHeader>
+
+          {insightsMutation.isPending ? (
+            <div className="flex flex-col items-center justify-center py-10 gap-3">
+              <HugeiconsIcon icon={Loading03Icon} strokeWidth={2} className="size-8 animate-spin text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">{t("dashboard.generatingInsights")}</p>
+            </div>
+          ) : insightsMutation.isError ? (
+            <div className="py-6 text-center">
+              <p className="text-sm text-destructive">
+                {(insightsMutation.error as Error).message || t("common.somethingWentWrong")}
+              </p>
+            </div>
+          ) : insightsMutation.data ? (
+            <div className="space-y-4">
+              {insightsMutation.data.summary && (
+                <div>
+                  <h4 className="text-xs font-medium text-muted-foreground mb-1.5">{t("dashboard.summary")}</h4>
+                  <p className="text-sm leading-relaxed">{insightsMutation.data.summary}</p>
+                </div>
+              )}
+              {insightsMutation.data.insights && insightsMutation.data.insights.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-medium text-muted-foreground mb-1.5">{t("dashboard.insights")}</h4>
+                  <ul className="space-y-2">
+                    {insightsMutation.data.insights.map((insight, i) => (
+                      <li key={i} className="flex gap-2 text-sm leading-relaxed">
+                        <span className="text-primary font-medium shrink-0">{i + 1}.</span>
+                        <span>{insight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setInsightsOpen(false)}>
+              {t("common.close")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

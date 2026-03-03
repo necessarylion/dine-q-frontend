@@ -114,6 +114,7 @@ export const endpoints = {
 
   dashboard: {
     get: (restaurantId: number) => `/restaurants/${restaurantId}/dashboard`,
+    insights: (restaurantId: number) => `/restaurants/${restaurantId}/dashboard/insights`,
   },
 
   payments: {
