@@ -83,7 +83,7 @@ export const OrderCard = forwardRef<HTMLDivElement, OrderCardProps & React.HTMLA
           <div className="space-y-1.5">
             {order.order_items && order.order_items.length > 0 ? (
               <>
-                {order.order_items.slice(0, 3).map((item) => (
+                {order.order_items.map((item) => (
                   <div
                     key={item.id}
                     className="pb-1.5 border-b last:border-0 last:pb-0"
@@ -105,11 +105,6 @@ export const OrderCard = forwardRef<HTMLDivElement, OrderCardProps & React.HTMLA
                     )}
                   </div>
                 ))}
-                {order.order_items.length > 3 && (
-                  <p className="text-xs text-muted-foreground">
-                    {t("order.moreItems", { count: order.order_items.length - 3 })}
-                  </p>
-                )}
               </>
             ) : (
               <p className="text-xs text-muted-foreground">{t("order.noItems")}</p>

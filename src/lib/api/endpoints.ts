@@ -111,6 +111,8 @@ export const endpoints = {
       `/restaurants/${restaurantId}/orders/${orderId}`,
     delete: (restaurantId: number, orderId: number) =>
       `/restaurants/${restaurantId}/orders/${orderId}`,
+    removeItem: (restaurantId: number, orderId: number, itemId: number) =>
+      `/restaurants/${restaurantId}/orders/${orderId}/items/${itemId}`,
   },
 
   aiSettings: {
@@ -122,6 +124,8 @@ export const endpoints = {
       `/restaurants/${restaurantId}/ai-settings/${aiSettingId}`,
     delete: (restaurantId: number, aiSettingId: number) =>
       `/restaurants/${restaurantId}/ai-settings/${aiSettingId}`,
+    models: (restaurantId: number, aiSettingId: number) =>
+      `/restaurants/${restaurantId}/ai-settings/${aiSettingId}/models`,
   },
 
   dashboard: {

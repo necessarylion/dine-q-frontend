@@ -152,3 +152,32 @@ export const useDeleteOrder = () => {
     },
   });
 };
+
+// Remove item from order
+export const useRemoveOrderItem = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      restaurantId,
+      orderId,
+      orderItemId,
+    }: {
+      restaurantId: number;
+      orderId: number;
+      orderItemId: number;
+    }) => {
+      return api.delete<Order>(
+        endpoints.orders.removeItem(restaurantId, orderId, orderItemId)
+      );
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["orders", variables.restaurantId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["orders", variables.restaurantId, variables.orderId],
+      });
+    },
+  });
+};

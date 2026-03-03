@@ -8,6 +8,7 @@ const favicon = (domain: string) => `https://www.google.com/s2/favicons?domain=$
 
 export const AI_PROVIDERS = [
   { id: "openai", name: "OpenAI", baseUrl: "https://api.openai.com/v1", icon: favicon("openai.com") },
+  { id: "anthropic", name: "Anthropic (Claude)", baseUrl: "https://api.anthropic.com/v1/", icon: favicon("anthropic.com") },
   { id: "google", name: "Google Gemini", baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", icon: favicon("ai.google.dev") },
   { id: "groq", name: "Groq", baseUrl: "https://api.groq.com/openai/v1", icon: favicon("groq.com") },
   { id: "openrouter", name: "OpenRouter", baseUrl: "https://openrouter.ai/api/v1", icon: favicon("openrouter.ai") },

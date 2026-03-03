@@ -18,6 +18,7 @@
     "cannotBeUndone": "ဒီလုပ်ဆောင်ချက်ကို ပြန်ပြင်လို့ မရပါ။",
     "active": "အသုံးပြုနေ",
     "inactive": "ပိတ်ထား",
+    "noResults": "ရလဒ် မတွေ့ပါ",
     "available": "ရနိုင်",
     "unavailable": "မရနိုင်",
     "noData": "ဒေတာ မရှိပါ",
@@ -311,7 +312,9 @@
     "ready": "အဆင်သင့်",
     "completed": "ပြီးဆုံး",
     "cancelled": "ပယ်ဖျက်",
-    "done": "ပြီး"
+    "done": "ပြီး",
+    "removeItem": "အရာဖယ်ရှားရန်",
+    "removeItemConfirm": "\"{{name}}\" ကို ဤအော်ဒါမှ ဖယ်ရှားမှာ သေချာပါသလား?"
   },
   "booking": {
     "title": "ကြိုတင်မှာယူမှုများ",
@@ -452,6 +455,7 @@
     "provider": "Provider",
     "selectProvider": "Provider ရွေးပါ...",
     "customProvider": "ကိုယ်တိုင်ထည့်မယ်",
+    "selectModel": "Model ရွေးပါ...",
     "aiSettingRequired": "AI ဆက်တင် လိုအပ်ပါတယ်",
     "aiSettingRequiredDescription": "Active ဖြစ်တဲ့ AI ဆက်တင် မရှိပါ။ Settings မှာ AI provider အရင် သတ်မှတ်ပေးပါ။",
     "goToAISettings": "AI Settings သို့သွားမယ်"

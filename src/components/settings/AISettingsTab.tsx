@@ -6,6 +6,7 @@ import { useRestaurant } from "@/hooks/useRestaurant";
 import { AI_PROVIDERS } from "@/constants";
 import {
   useAISettings,
+  useAIModels,
   useCreateAISetting,
   useUpdateAISetting,
   useDeleteAISetting,
@@ -29,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ModelCombobox } from "@/components/general/ModelCombobox";
 import {
   Dialog,
   DialogContent,
@@ -50,6 +52,12 @@ import {
   Loading03Icon,
   AiMagicIcon,
 } from "@hugeicons/core-free-icons";
+
+const ProviderIcon = ({ src }: { src: string }) => {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <HugeiconsIcon icon={AiMagicIcon} strokeWidth={2} className="size-4" />;
+  return <img src={src} alt="" className="size-4" onError={() => setFailed(true)} />;
+};
 
 export const AISettingsTab = () => {
   const { t } = useTranslation();
@@ -112,7 +120,7 @@ export const AISettingsTab = () => {
                     {(() => {
                       const provider = AI_PROVIDERS.find((p) => p.baseUrl && p.baseUrl === setting.base_url);
                       return provider?.icon ? (
-                        <img src={provider.icon} alt="" className="size-4" />
+                        <ProviderIcon src={provider.icon} />
                       ) : (
                         <HugeiconsIcon icon={AiMagicIcon} strokeWidth={2} className="size-4" />
                       );
@@ -288,7 +296,7 @@ function CreateAISettingDialog({
                       <SelectItem key={provider.id} value={provider.id}>
                         <span className="flex items-center gap-2">
                           {provider.icon ? (
-                            <img src={provider.icon} alt="" className="size-4" />
+                            <ProviderIcon src={provider.icon} />
                           ) : (
                             <HugeiconsIcon icon={AiMagicIcon} strokeWidth={2} className="size-4" />
                           )}
@@ -318,6 +326,14 @@ function CreateAISettingDialog({
             {errors.base_url && <FieldError>{errors.base_url.message}</FieldError>}
           </Field>
 
+          <Field data-invalid={!!errors.api_key}>
+            <FieldLabel>{t("settings.apiKey")}</FieldLabel>
+            <FieldContent>
+              <Input {...register("api_key")} type="password" placeholder="API key" />
+            </FieldContent>
+            {errors.api_key && <FieldError>{errors.api_key.message}</FieldError>}
+          </Field>
+
           <div className="grid grid-cols-2 gap-4">
             <Field data-invalid={!!errors.model}>
               <FieldLabel>{t("settings.model")}</FieldLabel>
@@ -335,14 +351,6 @@ function CreateAISettingDialog({
               {errors.vision_model && <FieldError>{errors.vision_model.message}</FieldError>}
             </Field>
           </div>
-
-          <Field data-invalid={!!errors.api_key}>
-            <FieldLabel>{t("settings.apiKey")}</FieldLabel>
-            <FieldContent>
-              <Input {...register("api_key")} type="password" placeholder="API key" />
-            </FieldContent>
-            {errors.api_key && <FieldError>{errors.api_key.message}</FieldError>}
-          </Field>
 
           <DialogFooter>
             <Button type="button" variant="outline" size="sm" onClick={() => onOpenChange(false)}>
@@ -378,11 +386,14 @@ function EditAISettingDialog({
     matchedProvider?.id || "custom"
   );
 
+  const { data: models = [] } = useAIModels(restaurantId, setting.id);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<UpdateAISettingFormData>({
     resolver: zodResolver(updateAISettingFormSchema) as any,
     defaultValues: {
@@ -394,6 +405,9 @@ function EditAISettingDialog({
       is_active: setting.is_active,
     },
   });
+
+  const modelValue = watch("model");
+  const visionModelValue = watch("vision_model");
 
   const handleProviderChange = (providerId: string) => {
     setSelectedProvider(providerId);
@@ -441,7 +455,7 @@ function EditAISettingDialog({
                       <SelectItem key={provider.id} value={provider.id}>
                         <span className="flex items-center gap-2">
                           {provider.icon ? (
-                            <img src={provider.icon} alt="" className="size-4" />
+                            <ProviderIcon src={provider.icon} />
                           ) : (
                             <HugeiconsIcon icon={AiMagicIcon} strokeWidth={2} className="size-4" />
                           )}
@@ -471,24 +485,6 @@ function EditAISettingDialog({
             {errors.base_url && <FieldError>{errors.base_url.message}</FieldError>}
           </Field>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Field data-invalid={!!errors.model}>
-              <FieldLabel>{t("settings.model")}</FieldLabel>
-              <FieldContent>
-                <Input {...register("model")} placeholder="e.g. gemini-3-flash-preview" />
-              </FieldContent>
-              {errors.model && <FieldError>{errors.model.message}</FieldError>}
-            </Field>
-
-            <Field data-invalid={!!errors.vision_model}>
-              <FieldLabel>{t("settings.visionModel")}</FieldLabel>
-              <FieldContent>
-                <Input {...register("vision_model")} placeholder="e.g. gemini-3-flash-preview" />
-              </FieldContent>
-              {errors.vision_model && <FieldError>{errors.vision_model.message}</FieldError>}
-            </Field>
-          </div>
-
           <Field data-invalid={!!errors.api_key}>
             <FieldLabel>{t("settings.apiKey")}</FieldLabel>
             <FieldContent>
@@ -500,6 +496,42 @@ function EditAISettingDialog({
             </FieldContent>
             {errors.api_key && <FieldError>{errors.api_key.message}</FieldError>}
           </Field>
+
+          <div className="grid grid-cols-2 gap-4">
+            <Field data-invalid={!!errors.model}>
+              <FieldLabel>{t("settings.model")}</FieldLabel>
+              <FieldContent>
+                {models.length > 0 ? (
+                  <ModelCombobox
+                    models={models}
+                    value={modelValue}
+                    onValueChange={(v) => setValue("model", v)}
+                    placeholder={t("settings.selectModel")}
+                  />
+                ) : (
+                  <Input {...register("model")} placeholder="e.g. gemini-3-flash-preview" />
+                )}
+              </FieldContent>
+              {errors.model && <FieldError>{errors.model.message}</FieldError>}
+            </Field>
+
+            <Field data-invalid={!!errors.vision_model}>
+              <FieldLabel>{t("settings.visionModel")}</FieldLabel>
+              <FieldContent>
+                {models.length > 0 ? (
+                  <ModelCombobox
+                    models={models}
+                    value={visionModelValue}
+                    onValueChange={(v) => setValue("vision_model", v)}
+                    placeholder={t("settings.selectModel")}
+                  />
+                ) : (
+                  <Input {...register("vision_model")} placeholder="e.g. gemini-3-flash-preview" />
+                )}
+              </FieldContent>
+              {errors.vision_model && <FieldError>{errors.vision_model.message}</FieldError>}
+            </Field>
+          </div>
 
           <DialogFooter>
             <Button type="button" variant="outline" size="sm" onClick={() => onOpenChange(false)}>

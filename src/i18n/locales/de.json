@@ -18,6 +18,7 @@
     "cannotBeUndone": "Diese Aktion kann nicht rückgängig gemacht werden.",
     "active": "Aktiv",
     "inactive": "Inaktiv",
+    "noResults": "Keine Ergebnisse gefunden",
     "available": "Verfügbar",
     "unavailable": "Nicht verfügbar",
     "noData": "Keine Daten",
@@ -311,7 +312,9 @@
     "ready": "Bereit",
     "completed": "Abgeschlossen",
     "cancelled": "Storniert",
-    "done": "Fertig"
+    "done": "Fertig",
+    "removeItem": "Artikel entfernen",
+    "removeItemConfirm": "Möchten Sie \"{{name}}\" wirklich aus dieser Bestellung entfernen?"
   },
   "booking": {
     "title": "Reservierungen",
@@ -452,6 +455,7 @@
     "provider": "Anbieter",
     "selectProvider": "Anbieter auswählen...",
     "customProvider": "Benutzerdefiniert",
+    "selectModel": "Modell auswählen...",
     "aiSettingRequired": "KI-Einstellung erforderlich",
     "aiSettingRequiredDescription": "Keine aktive KI-Einstellung gefunden. Bitte konfigurieren Sie zuerst einen KI-Anbieter in den Einstellungen.",
     "goToAISettings": "Zu KI-Einstellungen"

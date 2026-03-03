@@ -22,6 +22,7 @@
     "unavailable": "Unavailable",
     "noData": "No data",
     "noImage": "No image",
+    "noResults": "No results found",
     "updating": "Updating...",
     "creating": "Creating...",
     "add": "Add",
@@ -311,7 +312,9 @@
     "ready": "Ready",
     "completed": "Completed",
     "cancelled": "Cancelled",
-    "done": "Done"
+    "done": "Done",
+    "removeItem": "Remove Item",
+    "removeItemConfirm": "Are you sure you want to remove \"{{name}}\" from this order?"
   },
   "booking": {
     "title": "Bookings",
@@ -452,6 +455,7 @@
     "provider": "Provider",
     "selectProvider": "Select a provider...",
     "customProvider": "Custom",
+    "selectModel": "Select a model...",
     "aiSettingRequired": "AI Setting Required",
     "aiSettingRequiredDescription": "No active AI setting found. Please configure an AI provider in settings first.",
     "goToAISettings": "Go to AI Settings"

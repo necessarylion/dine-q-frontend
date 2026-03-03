@@ -13,6 +13,18 @@ const refreshCurrentRestaurant = async (restaurantId: number) => {
   }
 };
 
+export const useAIModels = (
+  restaurantId: number | undefined,
+  aiSettingId: number | undefined
+) => {
+  return useQuery({
+    queryKey: ["aiModels", restaurantId, aiSettingId],
+    queryFn: () =>
+      api.get<string[]>(endpoints.aiSettings.models(restaurantId!, aiSettingId!)),
+    enabled: !!restaurantId && !!aiSettingId,
+  });
+};
+
 export const useAISettings = (restaurantId: number | undefined) => {
   return useQuery({
     queryKey: ["aiSettings", restaurantId],
