@@ -45,7 +45,7 @@ import {
 import { OrderStatus, type Order } from "@/types";
 import { useAlertDialog } from "@/hooks/useAlertDialog";
 import type { CreateBookingFormData } from "@/schemas/booking_schema";
-import { toRFC3339, getNextStatus } from "@/lib/utils";
+import { toRFC3339 } from "@/lib/utils";
 
 const MIN_SCALE = 0.3;
 const MAX_SCALE = 3;
