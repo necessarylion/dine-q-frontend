@@ -44,6 +44,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { OrderStatus, type Order } from "@/types";
 import { useAlertDialog } from "@/hooks/useAlertDialog";
+import { useUIStore } from "@/stores/uiStore";
 import type { CreateBookingFormData } from "@/schemas/booking_schema";
 import { toRFC3339 } from "@/lib/utils";
 
@@ -94,19 +95,36 @@ export const FloorPlanCanvas = ({ activeZoneId, onActiveZoneChange }: FloorPlanC
   const stageRef = useRef<Konva.Stage>(null);
   const [stageSize, setStageSize] = useState({ width: 700, height: 600 });
 
-  // Responsive stage sizing
-  useEffect(() => {
-    function updateSize() {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        const height = Math.max(500, window.innerHeight - 240);
-        setStageSize({ width, height });
+  const sidebarHidden = useUIStore((s) => s.sidebarHidden);
+
+  // Measure container width by temporarily collapsing the canvas
+  const updateSize = useCallback(() => {
+    const stage = stageRef.current;
+    // Collapse canvas so it doesn't push the container wider
+    if (stage) stage.width(0);
+    requestAnimationFrame(() => {
+      if (!containerRef.current) return;
+      const width = containerRef.current.offsetWidth;
+      const height = Math.max(500, window.innerHeight - 240);
+      setStageSize({ width, height });
+      if (stage) {
+        stage.width(width);
+        stage.height(height + 80);
       }
-    }
+    });
+  }, []);
+
+  useEffect(() => {
     updateSize();
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
-  }, []);
+  }, [updateSize]);
+
+  // Re-measure when sidebar toggles
+  useEffect(() => {
+    const timer = setTimeout(updateSize, 100);
+    return () => clearTimeout(timer);
+  }, [sidebarHidden, updateSize]);
 
   const handleZoomIn = useCallback(() => {
     const stage = stageRef.current;
@@ -305,10 +323,10 @@ export const FloorPlanCanvas = ({ activeZoneId, onActiveZoneChange }: FloorPlanC
       )}
 
       {/* Canvas area */}
-      <div className="flex-1 space-y-0">
+      <div className="flex-1 min-w-0 space-y-0">
         <div
           ref={containerRef}
-          className="relative rounded-lg border bg-card"
+          className="relative overflow-hidden rounded-lg border bg-card"
           style={{
             backgroundImage: "radial-gradient(circle, var(--color-border) 1px, transparent 1px)",
             backgroundSize: "24px 24px",

@@ -321,7 +321,15 @@
     "advanceStatusTitle": "Bestellstatus aktualisieren",
     "advanceStatusDescription": "Bestellung #{{id}} von {{from}} nach {{to}} verschieben?",
     "fullPage": "Vollbild",
-    "exitFullPage": "Vollbild beenden"
+    "exitFullPage": "Vollbild beenden",
+    "createOrder": "Bestellung erstellen",
+    "selectTable": "Tisch auswählen",
+    "selectTableDescription": "Wählen Sie einen Tisch für die neue Bestellung",
+    "noTable": "Ohne Tisch fortfahren (Zum Mitnehmen)",
+    "otherTables": "Andere Tische",
+    "deleteOrder": "Bestellung löschen",
+    "deletingOrder": "Wird gelöscht...",
+    "deleteOrderConfirm": "Möchten Sie Bestellung #{{id}} wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
   },
   "booking": {
     "title": "Reservierungen",

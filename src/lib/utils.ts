@@ -30,10 +30,24 @@ export function toDatetimeLocal(utcStr: string): string {
  * @param currency - Currency code (e.g., "USD", "MMK")
  * @returns Formatted price string
  */
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  MMK: "Ks",
+};
+
 export function formatPrice(price: number, currency: string): string {
+  const symbol = CURRENCY_SYMBOLS[currency.toUpperCase()];
+  if (symbol) {
+    const formatted = new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(price);
+    return `${symbol} ${formatted}`;
+  }
+
   const parts = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currency,
+    currencyDisplay: "narrowSymbol",
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).formatToParts(price);

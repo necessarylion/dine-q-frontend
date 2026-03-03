@@ -326,8 +326,9 @@ export const DashboardPage = () => {
                           backgroundColor: "hsl(var(--card))",
                           border: "1px solid hsl(var(--border))",
                           borderRadius: "8px",
-                          color: "hsl(var(--foreground))",
                         }}
+                        labelStyle={{ color: "hsl(var(--foreground))" }}
+                        itemStyle={{ color: "hsl(var(--foreground))" }}
                       />
                       <Bar yAxisId="left" dataKey="orders" name={t("dashboard.orders")} fill="#6366f1" radius={[4, 4, 0, 0]} />
                       <Line yAxisId="right" type="monotone" dataKey="revenue" name={t("dashboard.revenue")} stroke="#22c55e" strokeWidth={2} dot={false} />
@@ -368,8 +369,9 @@ export const DashboardPage = () => {
                           backgroundColor: "hsl(var(--card))",
                           border: "1px solid hsl(var(--border))",
                           borderRadius: "8px",
-                          color: "hsl(var(--foreground))",
                         }}
+                        labelStyle={{ color: "hsl(var(--foreground))" }}
+                        itemStyle={{ color: "hsl(var(--foreground))" }}
                       />
                       <Legend />
                     </PieChart>
@@ -487,8 +489,8 @@ export const DashboardPage = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-2xl font-bold">{data.members.total}</span>
+                  <div className="flex items-center mb-2">
+                    <span className="text-2xl font-bold mr-2">{data.members.total}</span>
                     <span className="text-sm text-muted-foreground">{t("dashboard.members")}</span>
                   </div>
                   {data.members.by_role && Object.keys(data.members.by_role).length > 0 && (
@@ -586,7 +588,7 @@ function KpiCard({
           </div>
           <div className="min-w-0">
             <p className="text-sm text-muted-foreground">{title}</p>
-            <p className="text-2xl font-bold truncate">{value}</p>
+            <p className="text-lg font-bold truncate">{value}</p>
           </div>
         </div>
       </CardContent>

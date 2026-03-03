@@ -321,7 +321,15 @@
     "advanceStatusTitle": "အော်ဒါ အခြေအနေ ပြောင်းမည်",
     "advanceStatusDescription": "အော်ဒါ #{{id}} ကို {{from}} မှ {{to}} သို့ ပြောင်းမလား?",
     "fullPage": "စာမျက်နှာ အပြည့်",
-    "exitFullPage": "စာမျက်နှာ အပြည့် ပိတ်မည်"
+    "exitFullPage": "စာမျက်နှာ အပြည့် ပိတ်မည်",
+    "createOrder": "အော်ဒါ ဖန်တီးမည်",
+    "selectTable": "စားပွဲ ရွေးပါ",
+    "selectTableDescription": "အော်ဒါအသစ်အတွက် စားပွဲ ရွေးပါ",
+    "noTable": "စားပွဲမပါဘဲ ဆက်လုပ်မည် (ထုပ်ယူ)",
+    "otherTables": "အခြား စားပွဲများ",
+    "deleteOrder": "အော်ဒါ ဖျက်မည်",
+    "deletingOrder": "ဖျက်နေသည်...",
+    "deleteOrderConfirm": "အော်ဒါ #{{id}} ကို ဖျက်မှာ သေချာလား? ပြန်ပြင်လို့ မရတော့ဘူး။"
   },
   "booking": {
     "title": "ကြိုတင်မှာယူမှုများ",

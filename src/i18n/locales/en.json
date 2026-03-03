@@ -321,7 +321,15 @@
     "advanceStatusTitle": "Update Order Status",
     "advanceStatusDescription": "Move Order #{{id}} from {{from}} to {{to}}?",
     "fullPage": "Full page",
-    "exitFullPage": "Exit full page"
+    "exitFullPage": "Exit full page",
+    "createOrder": "Create Order",
+    "selectTable": "Select a Table",
+    "selectTableDescription": "Choose a table for the new order",
+    "noTable": "Continue without table (Takeaway)",
+    "otherTables": "Other tables",
+    "deleteOrder": "Delete Order",
+    "deletingOrder": "Deleting...",
+    "deleteOrderConfirm": "Are you sure you want to delete Order #{{id}}? This action cannot be undone."
   },
   "booking": {
     "title": "Bookings",

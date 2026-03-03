@@ -30,14 +30,13 @@ import {
   Loading03Icon,
   DeliveryBox01Icon,
   TaskDone02Icon,
-  Maximize02Icon,
-  Minimize02Icon,
 } from "@hugeicons/core-free-icons";
 import { OrderStatus, type Order } from "@/types";
 import { ErrorCard } from "@/components/ErrorCard";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
-import { useUIStore } from "@/stores/uiStore";
+import { FullscreenToggle } from "@/components/general/FullscreenToggle";
+import { TableSelectionDialog } from "@/components/table/TableSelectionDialog";
 
 const columns = [
   {
@@ -145,10 +144,9 @@ export const OrderListPage = () => {
   const { confirm } = useAlertDialog();
   const { data: orders = [], isLoading, error } = useOrders(currentRestaurant?.id);
   const updateOrderMutation = useUpdateOrder();
-  const { sidebarHidden, toggleSidebar } = useUIStore();
-
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
+  const [showTableSelect, setShowTableSelect] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -280,18 +278,15 @@ export const OrderListPage = () => {
   return (
     <div className="flex flex-col flex-1 min-h-0">
       <PageHeader title={t("order.title")} description={t("order.description", { name: currentRestaurant.name })}>
-        <Button
-          variant="outline"
-          size="icon-sm"
-          onClick={toggleSidebar}
-          title={sidebarHidden ? t("order.exitFullPage") : t("order.fullPage")}
-        >
-          <HugeiconsIcon
-            icon={sidebarHidden ? Minimize02Icon : Maximize02Icon}
-            strokeWidth={2}
-            className="size-4"
+        <div className="flex items-center gap-2">
+          <FullscreenToggle
+            enterLabel={t("order.fullPage")}
+            exitLabel={t("order.exitFullPage")}
           />
-        </Button>
+          <Button onClick={() => setShowTableSelect(true)}>
+            {t("order.createOrder")}
+          </Button>
+        </div>
       </PageHeader>
       {/* Kanban Board */}
       <DndContext
@@ -351,6 +346,11 @@ export const OrderListPage = () => {
       <OrderDetailDialog
         order={selectedOrder}
         onClose={() => setSelectedOrder(null)}
+      />
+
+      <TableSelectionDialog
+        open={showTableSelect}
+        onOpenChange={setShowTableSelect}
       />
     </div>
   );

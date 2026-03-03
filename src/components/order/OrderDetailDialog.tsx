@@ -6,7 +6,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRestaurant } from "@/hooks/useRestaurant";
-import { useUpdateOrder, useRemoveOrderItem } from "@/hooks/useOrders";
+import { useUpdateOrder, useDeleteOrder, useRemoveOrderItem } from "@/hooks/useOrders";
 import { OrderStatusBadge } from "./OrderStatusBadge";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +29,12 @@ import {
   Restaurant01Icon,
   ShoppingBag02Icon,
   Delete01Icon,
+  Delete02Icon,
+  Calendar03Icon,
+  TableRoundIcon,
+  ShoppingBasket03Icon,
+  CheckmarkCircle02Icon,
+  ArrowTurnForwardIcon,
 } from "@hugeicons/core-free-icons";
 import { OrderStatus, OrderType, type Order, type OrderItem } from "@/types";
 import { formatPrice } from "@/lib/utils";
@@ -56,6 +62,7 @@ export const OrderDetailDialog = ({
   const { t } = useTranslation();
   const { currentRestaurant } = useRestaurant();
   const updateOrderMutation = useUpdateOrder();
+  const deleteOrderMutation = useDeleteOrder();
   const removeItemMutation = useRemoveOrderItem();
   const { confirm } = useAlertDialog();
   const [newStatus, setNewStatus] = useState<OrderStatus | null>(null);
@@ -128,50 +135,84 @@ export const OrderDetailDialog = ({
     }
   };
 
+  const handleDeleteOrder = async () => {
+    if (!currentRestaurant || !order) return;
+
+    const confirmed = await confirm({
+      title: t("order.deleteOrder"),
+      description: t("order.deleteOrderConfirm", { id: order.id }),
+      confirmLabel: t("common.delete"),
+      destructive: true,
+    });
+    if (!confirmed) return;
+
+    try {
+      await deleteOrderMutation.mutateAsync({
+        restaurantId: currentRestaurant.id,
+        orderId: order.id,
+      });
+      onClose();
+    } catch {
+      // error handled by mutation
+    }
+  };
+
   return (
     <Dialog open={!!order} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="sm:max-w-lg max-h-[85vh] flex flex-col">
         {order && (
           <>
-            <DialogHeader>
+            <DialogHeader className="shrink-0">
               <DialogTitle>{t("order.orderNumber", { id: order.id })}</DialogTitle>
             </DialogHeader>
 
-            <div className="space-y-4">
+            <div className="space-y-4 overflow-y-auto -mx-4 px-4">
               {/* Order Info */}
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-muted-foreground">{t("order.created")}</p>
-                  <p className="font-medium">
+                  <p className="flex items-center gap-1.5 text-muted-foreground">
+                    <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-3.5" />
+                    {t("order.created")}
+                  </p>
+                  <p className="font-medium mt-1">
                     {formatDateTime(order.created_at)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">{t("booking.table")}</p>
-                  <p className="font-medium">
+                  <p className="flex items-center gap-1.5 text-muted-foreground">
+                    <HugeiconsIcon icon={TableRoundIcon} strokeWidth={2} className="size-3.5" />
+                    {t("booking.table")}
+                  </p>
+                  <p className="font-medium mt-1">
                     {order.table?.table_number || "N/A"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">{t("order.type")}</p>
+                  <p className="flex items-center gap-1.5 text-muted-foreground">
+                    <HugeiconsIcon icon={order.order_type === OrderType.DINE_IN ? Restaurant01Icon : ShoppingBag02Icon} strokeWidth={2} className="size-3.5" />
+                    {t("order.type")}
+                  </p>
                   <Badge variant="outline" className="mt-1">
-                    <HugeiconsIcon
-                      icon={order.order_type === OrderType.DINE_IN ? Restaurant01Icon : ShoppingBag02Icon}
-                      strokeWidth={2}
-                      className="size-3.5"
-                    />
                     {order.order_type === OrderType.DINE_IN ? t("order.dineIn") : t("order.takeaway")}
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">{t("booking.status")}</p>
-                  <OrderStatusBadge status={order.status} />
+                  <p className="flex items-center gap-1.5 text-muted-foreground">
+                    <HugeiconsIcon icon={ArrowTurnForwardIcon} strokeWidth={2} className="size-3.5" />
+                    {t("booking.status")}
+                  </p>
+                  <div className="mt-1">
+                    <OrderStatusBadge status={order.status} />
+                  </div>
                 </div>
               </div>
 
               {/* Order Items */}
               <div>
-                <h3 className="font-semibold mb-2">{t("order.items")}</h3>
+                <h3 className="flex items-center gap-1.5 font-semibold mb-2">
+                  <HugeiconsIcon icon={ShoppingBasket03Icon} strokeWidth={2} className="size-4" />
+                  {t("order.items")}
+                </h3>
                 <div className="space-y-2 border rounded-lg p-3">
                   {localItems.map((item) => (
                     <div
@@ -215,7 +256,8 @@ export const OrderDetailDialog = ({
 
               {/* Update Status */}
               <div>
-                <label className="text-sm font-medium mb-2 block">
+                <label className="flex items-center gap-1.5 text-sm font-medium mb-2">
+                  <HugeiconsIcon icon={ArrowTurnForwardIcon} strokeWidth={2} className="size-4" />
                   {t("order.updateStatus")}
                 </label>
                 <Select
@@ -237,19 +279,32 @@ export const OrderDetailDialog = ({
               </div>
             </div>
 
-            <DialogFooter>
-              <Button variant="outline" onClick={onClose}>
-                {t("common.close")}
-              </Button>
-              <Button
-                onClick={handleUpdateStatus}
-                disabled={
-                  updateOrderMutation.isPending ||
-                  newStatus === order.status
-                }
-              >
-                {updateOrderMutation.isPending ? t("order.updatingStatus") : t("order.updateStatus")}
-              </Button>
+            <DialogFooter className="shrink-0 flex-row justify-between sm:justify-between">
+              {!order.payment_id && (
+                <Button
+                  variant="destructive"
+                  onClick={handleDeleteOrder}
+                  disabled={deleteOrderMutation.isPending}
+                >
+                  <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} className="size-4" />
+                  {deleteOrderMutation.isPending ? t("order.deletingOrder") : t("order.deleteOrder")}
+                </Button>
+              )}
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={onClose}>
+                  {t("common.close")}
+                </Button>
+                <Button
+                  onClick={handleUpdateStatus}
+                  disabled={
+                    updateOrderMutation.isPending ||
+                    newStatus === order.status
+                  }
+                >
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-4" />
+                  {updateOrderMutation.isPending ? t("order.updatingStatus") : t("order.updateStatus")}
+                </Button>
+              </div>
             </DialogFooter>
           </>
         )}

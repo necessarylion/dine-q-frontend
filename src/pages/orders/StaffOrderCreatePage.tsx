@@ -138,7 +138,7 @@ export const StaffOrderCreatePage = () => {
     try {
       await createOrderMutation.mutateAsync({
         restaurantId: currentRestaurant.id,
-        order_type: OrderType.DINE_IN,
+        order_type: tableId ? OrderType.DINE_IN : OrderType.TAKEAWAY,
         table_id: tableId ? Number(tableId) : undefined,
         items: orderItems.map((item) => ({
           menu_item_id: item.menuItem.id,
