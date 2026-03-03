@@ -10,19 +10,43 @@ import { Button } from "@/components/ui/button";
 import { OrderStatusBadge } from "./OrderStatusBadge";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  ArrowRight01Icon,
+  ViewIcon,
   Calendar03Icon,
   TableRoundIcon,
   Restaurant01Icon,
   ShoppingBag02Icon,
+  CheckmarkCircle02Icon,
+  Loading03Icon,
+  DeliveryBox01Icon,
+  TaskDone02Icon,
 } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
-import { OrderType, type Order } from "@/types";
-import { formatPrice } from "@/lib/utils";
+import { OrderType, OrderStatus, type Order } from "@/types";
+import { formatPrice, getNextStatus } from "@/lib/utils";
+
+const nextStatusConfig: Record<string, { icon: any; className: string }> = {
+  [OrderStatus.CONFIRMED]: {
+    icon: CheckmarkCircle02Icon,
+    className: "bg-green-600 text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600",
+  },
+  [OrderStatus.PREPARING]: {
+    icon: Loading03Icon,
+    className: "bg-purple-600 text-white hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600",
+  },
+  [OrderStatus.READY]: {
+    icon: DeliveryBox01Icon,
+    className: "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600",
+  },
+  [OrderStatus.COMPLETED]: {
+    icon: TaskDone02Icon,
+    className: "bg-green-600 text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600",
+  },
+};
 
 interface OrderCardProps {
   order: Order;
   onViewDetails?: (order: Order) => void;
+  onStatusChange?: (order: Order, nextStatus: OrderStatus) => void;
   isDragging?: boolean;
   style?: React.CSSProperties;
   showPrice?: boolean;
@@ -30,8 +54,9 @@ interface OrderCardProps {
 }
 
 export const OrderCard = forwardRef<HTMLDivElement, OrderCardProps & React.HTMLAttributes<HTMLDivElement>>(
-  ({ order, onViewDetails, isDragging, style, className, showPrice, currency, ...props }, ref) => {
+  ({ order, onViewDetails, onStatusChange, isDragging, style, className, showPrice, currency, ...props }, ref) => {
     const { t } = useTranslation();
+    const nextStatus = getNextStatus(order.status);
     const formatDateTime = (dateString: string) => {
       const date = new Date(dateString);
       return date.toLocaleString("en-US", {
@@ -122,23 +147,48 @@ export const OrderCard = forwardRef<HTMLDivElement, OrderCardProps & React.HTMLA
           )}
 
           {/* Actions */}
-          {onViewDetails && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onViewDetails(order);
-              }}
-              className="w-full"
-            >
-              <HugeiconsIcon
-                icon={ArrowRight01Icon}
-                strokeWidth={2}
-                className="size-4 mr-1"
-              />
-              {t("order.viewDetails")}
-            </Button>
+          {(onViewDetails || (onStatusChange && nextStatus)) && (
+            <div className="flex gap-2">
+              {onViewDetails && (
+                <Button
+                  variant="outline"
+                  size="xs"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onViewDetails(order);
+                  }}
+                  className="px-1.5 shrink-0"
+                >
+                  <HugeiconsIcon
+                    icon={ViewIcon}
+                    strokeWidth={2}
+                    className="size-3"
+                  />
+                </Button>
+              )}
+              {onStatusChange && nextStatus && (() => {
+                const config = nextStatusConfig[nextStatus];
+                return (
+                  <Button
+                    size="xs"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onStatusChange(order, nextStatus);
+                    }}
+                    className={`flex-1 px-1.5 ${config?.className || ""}`}
+                  >
+                    {config && (
+                      <HugeiconsIcon
+                        icon={config.icon}
+                        strokeWidth={2}
+                        className="size-3 mr-1"
+                      />
+                    )}
+                    {t(`order.${nextStatus}`)}
+                  </Button>
+                );
+              })()}
+            </div>
           )}
         </CardContent>
       </Card>

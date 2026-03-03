@@ -18,6 +18,7 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { useRestaurant } from "@/hooks/useRestaurant";
+import { useAlertDialog } from "@/hooks/useAlertDialog";
 import { useOrders, useUpdateOrder } from "@/hooks/useOrders";
 import { OrderCard } from "@/components/order/OrderCard";
 import { OrderDetailDialog } from "@/components/order/OrderDetailDialog";
@@ -29,10 +30,14 @@ import {
   Loading03Icon,
   DeliveryBox01Icon,
   TaskDone02Icon,
+  Maximize02Icon,
+  Minimize02Icon,
 } from "@hugeicons/core-free-icons";
 import { OrderStatus, type Order } from "@/types";
 import { ErrorCard } from "@/components/ErrorCard";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { Button } from "@/components/ui/button";
+import { useUIStore } from "@/stores/uiStore";
 
 const columns = [
   {
@@ -81,9 +86,11 @@ const columns = [
 const DraggableOrderCard = ({
   order,
   onViewDetails,
+  onStatusChange,
 }: {
   order: Order;
   onViewDetails: (order: Order) => void;
+  onStatusChange: (order: Order, nextStatus: OrderStatus) => void;
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `order-${order.id}`,
@@ -99,6 +106,7 @@ const DraggableOrderCard = ({
       ref={setNodeRef}
       order={order}
       onViewDetails={onViewDetails}
+      onStatusChange={onStatusChange}
       isDragging={isDragging}
       style={style}
       {...listeners}
@@ -134,8 +142,10 @@ const DroppableColumn = ({
 export const OrderListPage = () => {
   const { t } = useTranslation();
   const { currentRestaurant } = useRestaurant();
+  const { confirm } = useAlertDialog();
   const { data: orders = [], isLoading, error } = useOrders(currentRestaurant?.id);
   const updateOrderMutation = useUpdateOrder();
+  const { sidebarHidden, toggleSidebar } = useUIStore();
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
@@ -203,6 +213,36 @@ export const OrderListPage = () => {
     setSelectedOrder(order);
   };
 
+  const handleStatusChange = async (order: Order, nextStatus: OrderStatus) => {
+    if (!currentRestaurant) return;
+
+    const confirmed = await confirm({
+      title: t("order.advanceStatusTitle"),
+      description: t("order.advanceStatusDescription", {
+        id: order.id,
+        from: t(`order.${order.status}`),
+        to: t(`order.${nextStatus}`),
+      }),
+      confirmLabel: t(`order.${nextStatus}`),
+    });
+
+    if (!confirmed) return;
+
+    updateOrderMutation.mutate({
+      restaurantId: currentRestaurant.id,
+      orderId: order.id,
+      order_type: order.order_type,
+      status: nextStatus,
+      table_id: order.table_id || undefined,
+      items:
+        order.order_items?.map((item) => ({
+          menu_item_id: item.menu_item_id,
+          quantity: item.quantity,
+          notes: item.notes || undefined,
+        })) || [],
+    });
+  };
+
   if (!currentRestaurant) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -239,7 +279,20 @@ export const OrderListPage = () => {
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <PageHeader title={t("order.title")} description={t("order.description", { name: currentRestaurant.name })} />
+      <PageHeader title={t("order.title")} description={t("order.description", { name: currentRestaurant.name })}>
+        <Button
+          variant="outline"
+          size="icon-sm"
+          onClick={toggleSidebar}
+          title={sidebarHidden ? t("order.exitFullPage") : t("order.fullPage")}
+        >
+          <HugeiconsIcon
+            icon={sidebarHidden ? Minimize02Icon : Maximize02Icon}
+            strokeWidth={2}
+            className="size-4"
+          />
+        </Button>
+      </PageHeader>
       {/* Kanban Board */}
       <DndContext
         sensors={sensors}
@@ -251,7 +304,7 @@ export const OrderListPage = () => {
           {columns.map((col) => {
             const colOrders = ordersByColumn.get(col.key) || [];
             return (
-              <div key={col.key} className="flex-1 flex flex-col gap-3 min-h-0">
+              <div key={col.key} className="flex-1 min-w-0 flex flex-col gap-3 min-h-0">
                 {/* Column Header */}
                 <div className={`flex items-center gap-2 px-1 shrink-0 ${col.headerClass}`}>
                   <HugeiconsIcon icon={col.icon} strokeWidth={2} className="size-4" />
@@ -273,6 +326,7 @@ export const OrderListPage = () => {
                         key={order.id}
                         order={order}
                         onViewDetails={handleViewDetails}
+                        onStatusChange={handleStatusChange}
                       />
                     ))
                   )}

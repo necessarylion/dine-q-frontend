@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { OrderStatus } from "@/types"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -41,4 +42,17 @@ export function formatPrice(price: number, currency: string): string {
     .map((p) => (p.type === "literal" && p.value.trim() === "" ? " " : p.value))
     .join("")
     .replace(/^([^\d]+?)(\d)/, "$1 $2");
+}
+
+const STATUS_FLOW: Record<string, OrderStatus | null> = {
+  [OrderStatus.PENDING]: OrderStatus.CONFIRMED,
+  [OrderStatus.CONFIRMED]: OrderStatus.PREPARING,
+  [OrderStatus.PREPARING]: OrderStatus.READY,
+  [OrderStatus.READY]: OrderStatus.COMPLETED,
+  [OrderStatus.COMPLETED]: null,
+  [OrderStatus.CANCELLED]: null,
+};
+
+export function getNextStatus(current: OrderStatus): OrderStatus | null {
+  return STATUS_FLOW[current] ?? null;
 }

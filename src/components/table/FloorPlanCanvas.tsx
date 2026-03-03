@@ -5,6 +5,7 @@
  */
 
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Stage, Layer } from "react-konva";
@@ -12,6 +13,7 @@ import type Konva from "konva";
 import { useRestaurant } from "@/hooks/useRestaurant";
 import { useTables, useTable, useZones, useSaveFloorPlan, useGenerateTableToken } from "@/hooks/useTables";
 import { useCreateBooking } from "@/hooks/useBookings";
+import { useUpdateOrder } from "@/hooks/useOrders";
 import { useCreatePayment } from "@/hooks/usePayments";
 import { BookingForm } from "@/components/booking/BookingForm";
 import { OrderCard } from "@/components/order/OrderCard";
@@ -40,10 +42,10 @@ import {
   DollarCircleIcon,
   QrCodeIcon,
 } from "@hugeicons/core-free-icons";
-import type { Order } from "@/types";
+import { OrderStatus, type Order } from "@/types";
 import { useAlertDialog } from "@/hooks/useAlertDialog";
 import type { CreateBookingFormData } from "@/schemas/booking_schema";
-import { toRFC3339 } from "@/lib/utils";
+import { toRFC3339, getNextStatus } from "@/lib/utils";
 
 const MIN_SCALE = 0.3;
 const MAX_SCALE = 3;
@@ -55,6 +57,7 @@ interface FloorPlanCanvasProps {
 }
 
 export const FloorPlanCanvas = ({ activeZoneId, onActiveZoneChange }: FloorPlanCanvasProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { currentRestaurant } = useRestaurant();
@@ -63,6 +66,7 @@ export const FloorPlanCanvas = ({ activeZoneId, onActiveZoneChange }: FloorPlanC
   const saveFloorPlanMutation = useSaveFloorPlan();
   const createBookingMutation = useCreateBooking();
   const createPaymentMutation = useCreatePayment();
+  const updateOrderMutation = useUpdateOrder();
   const queryClient = useQueryClient();
 
   const selectedTableId = searchParams.get("tableId") ? Number(searchParams.get("tableId")) : null;
@@ -213,6 +217,42 @@ export const FloorPlanCanvas = ({ activeZoneId, onActiveZoneChange }: FloorPlanC
       showAlert({ title: "Error", description: err.message || "Failed to make payment" });
     }
   }, [currentRestaurant, selectedTableId, tableDetails, confirm, createPaymentMutation, queryClient, showAlert]);
+
+  const handleStatusChange = useCallback(async (order: Order, nextStatus: OrderStatus) => {
+    if (!currentRestaurant) return;
+
+    const confirmed = await confirm({
+      title: t("order.advanceStatusTitle"),
+      description: t("order.advanceStatusDescription", {
+        id: order.id,
+        from: t(`order.${order.status}`),
+        to: t(`order.${nextStatus}`),
+      }),
+      confirmLabel: t(`order.${nextStatus}`),
+    });
+
+    if (!confirmed) return;
+
+    await updateOrderMutation.mutateAsync({
+      restaurantId: currentRestaurant.id,
+      orderId: order.id,
+      order_type: order.order_type,
+      status: nextStatus,
+      table_id: order.table_id || undefined,
+      items:
+        order.order_items?.map((item) => ({
+          menu_item_id: item.menu_item_id,
+          quantity: item.quantity,
+          notes: item.notes || undefined,
+        })) || [],
+    });
+
+    if (selectedTableId) {
+      queryClient.invalidateQueries({
+        queryKey: ["tables", currentRestaurant.id, selectedTableId],
+      });
+    }
+  }, [currentRestaurant, confirm, t, updateOrderMutation, queryClient, selectedTableId]);
 
   const selectedTable = tables.find((t) => t.id === selectedTableId);
 
@@ -445,6 +485,7 @@ export const FloorPlanCanvas = ({ activeZoneId, onActiveZoneChange }: FloorPlanC
                         key={order.id}
                         order={order}
                         onViewDetails={(o) => setSelectedOrder(o)}
+                        onStatusChange={handleStatusChange}
                       />
                     ))}
                   </div>

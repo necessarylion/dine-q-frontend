@@ -191,7 +191,9 @@
     "qrCode": "{{name}} - QR-Code",
     "tokenExpires": "Token läuft ab: {{date}}",
     "scanToOrder": "Gäste können diesen Code scannen, um Bestellungen aufzugeben",
-    "seats_count": "{{count}} Sitzplätze"
+    "seats_count": "{{count}} Sitzplätze",
+    "fullPage": "Vollbild",
+    "exitFullPage": "Vollbild beenden"
   },
   "zone": {
     "addNewZone": "Neue Zone hinzufügen",
@@ -314,7 +316,11 @@
     "cancelled": "Storniert",
     "done": "Fertig",
     "removeItem": "Artikel entfernen",
-    "removeItemConfirm": "Möchten Sie \"{{name}}\" wirklich aus dieser Bestellung entfernen?"
+    "removeItemConfirm": "Möchten Sie \"{{name}}\" wirklich aus dieser Bestellung entfernen?",
+    "advanceStatusTitle": "Bestellstatus aktualisieren",
+    "advanceStatusDescription": "Bestellung #{{id}} von {{from}} nach {{to}} verschieben?",
+    "fullPage": "Vollbild",
+    "exitFullPage": "Vollbild beenden"
   },
   "booking": {
     "title": "Reservierungen",

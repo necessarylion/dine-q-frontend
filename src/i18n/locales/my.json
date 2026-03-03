@@ -191,7 +191,9 @@
     "qrCode": "{{name}} - QR ကုဒ်",
     "tokenExpires": "တိုကင် သက်တမ်းကုန်ချိန်: {{date}}",
     "scanToOrder": "ဧည့်သည်များ ဒီကုဒ်ကို စကင်ဖတ်ပြီး အော်ဒါတင်နိုင်ပါတယ်",
-    "seats_count": "ထိုင်ခုံ {{count}} ခု"
+    "seats_count": "ထိုင်ခုံ {{count}} ခု",
+    "fullPage": "စာမျက်နှာ အပြည့်",
+    "exitFullPage": "စာမျက်နှာ အပြည့် ပိတ်မည်"
   },
   "zone": {
     "addNewZone": "ဇုန်အသစ် ထည့်မည်",
@@ -314,7 +316,11 @@
     "cancelled": "ပယ်ဖျက်",
     "done": "ပြီး",
     "removeItem": "အရာဖယ်ရှားရန်",
-    "removeItemConfirm": "\"{{name}}\" ကို ဤအော်ဒါမှ ဖယ်ရှားမှာ သေချာပါသလား?"
+    "removeItemConfirm": "\"{{name}}\" ကို ဤအော်ဒါမှ ဖယ်ရှားမှာ သေချာပါသလား?",
+    "advanceStatusTitle": "အော်ဒါ အခြေအနေ ပြောင်းမည်",
+    "advanceStatusDescription": "အော်ဒါ #{{id}} ကို {{from}} မှ {{to}} သို့ ပြောင်းမလား?",
+    "fullPage": "စာမျက်နှာ အပြည့်",
+    "exitFullPage": "စာမျက်နှာ အပြည့် ပိတ်မည်"
   },
   "booking": {
     "title": "ကြိုတင်မှာယူမှုများ",

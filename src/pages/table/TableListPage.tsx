@@ -30,14 +30,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { FloorPlanIcon, TableRoundIcon, CellsIcon, SeatSelectorIcon } from "@hugeicons/core-free-icons";
+import { FloorPlanIcon, TableRoundIcon, CellsIcon, SeatSelectorIcon, Maximize02Icon, Minimize02Icon } from "@hugeicons/core-free-icons";
 import type { Table } from "@/types";
 import { ErrorCard } from "@/components/ErrorCard";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { useUIStore } from "@/stores/uiStore";
 
 export const TableListPage = () => {
   const { t } = useTranslation();
   const { currentRestaurant } = useRestaurant();
+  const { sidebarHidden, toggleSidebar } = useUIStore();
   const {
     data: tables = [],
     isLoading,
@@ -193,14 +195,28 @@ export const TableListPage = () => {
   return (
     <div className="space-y-6">
       <PageHeader title={t("table.title")} description={t("table.description", { name: currentRestaurant.name })}>
-        <Button
-          onClick={() => {
-            setShowCreateForm(true);
-            setEditingTable(null);
-          }}
-        >
-          {t("table.createTable")}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon-sm"
+            onClick={toggleSidebar}
+            title={sidebarHidden ? t("table.exitFullPage") : t("table.fullPage")}
+          >
+            <HugeiconsIcon
+              icon={sidebarHidden ? Minimize02Icon : Maximize02Icon}
+              strokeWidth={2}
+              className="size-4"
+            />
+          </Button>
+          <Button
+            onClick={() => {
+              setShowCreateForm(true);
+              setEditingTable(null);
+            }}
+          >
+            {t("table.createTable")}
+          </Button>
+        </div>
       </PageHeader>
 
       {/* Create Form Dialog */}
