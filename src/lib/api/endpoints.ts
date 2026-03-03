@@ -112,6 +112,17 @@ export const endpoints = {
       `/restaurants/${restaurantId}/orders/${orderId}`,
   },
 
+  aiSettings: {
+    list: (restaurantId: number) => `/restaurants/${restaurantId}/ai-settings`,
+    create: (restaurantId: number) => `/restaurants/${restaurantId}/ai-settings`,
+    get: (restaurantId: number, aiSettingId: number) =>
+      `/restaurants/${restaurantId}/ai-settings/${aiSettingId}`,
+    update: (restaurantId: number, aiSettingId: number) =>
+      `/restaurants/${restaurantId}/ai-settings/${aiSettingId}`,
+    delete: (restaurantId: number, aiSettingId: number) =>
+      `/restaurants/${restaurantId}/ai-settings/${aiSettingId}`,
+  },
+
   dashboard: {
     get: (restaurantId: number) => `/restaurants/${restaurantId}/dashboard`,
     insights: (restaurantId: number) => `/restaurants/${restaurantId}/dashboard/insights`,

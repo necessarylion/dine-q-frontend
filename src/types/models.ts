@@ -276,6 +276,18 @@ export interface DashboardResponse {
   daily_orders: DailyOrderStat[];
 }
 
+export interface AISetting {
+  id: number;
+  name: string;
+  base_url: string;
+  model: string;
+  vision_model: string;
+  api_key_hint: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface DashboardInsightsResult {
   summary: string;
   insights: string[];

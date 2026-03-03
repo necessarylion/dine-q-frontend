@@ -182,6 +182,25 @@ export interface UpdateMemberRoleInput {
   role: Role;
 }
 
+// AI Setting API types
+export interface CreateAISettingInput {
+  name: string;
+  base_url: string;
+  model: string;
+  vision_model: string;
+  api_key: string;
+  is_active?: boolean;
+}
+
+export interface UpdateAISettingInput {
+  name: string;
+  base_url: string;
+  model: string;
+  vision_model: string;
+  api_key?: string;
+  is_active?: boolean;
+}
+
 // Generic response types
 export interface ErrorResponse {
   error: string;

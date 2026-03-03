@@ -38,6 +38,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Upload01Icon, Delete02Icon, AiMagicIcon } from "@hugeicons/core-free-icons";
 import { useGenerateDescription } from "@/hooks/useMenuItems";
+import { useRequireAISetting } from "@/hooks/useRequireAISetting";
 
 interface MenuItemFormProps {
   restaurantId: number;
@@ -68,6 +69,7 @@ export const MenuItemForm = ({
   const { t } = useTranslation();
   const isEdit = !!menuItem;
   const generateDescription = useGenerateDescription();
+  const { requireAISetting } = useRequireAISetting();
   const schema = isEdit ? updateMenuItemFormSchema : createMenuItemFormSchema;
 
   const {
@@ -368,7 +370,9 @@ export const MenuItemForm = ({
               variant="outline"
               className="ml-auto"
               disabled={generateDescription.isPending || (!watch("name") && !allFiles.length && !allPreviews.length)}
-              onClick={() => {
+              onClick={async () => {
+                const allowed = await requireAISetting();
+                if (!allowed) return;
                 const name = watch("name");
                 const categoryId = watch("category_id");
                 const category = categories.find((c) => c.id.toString() === categoryId);

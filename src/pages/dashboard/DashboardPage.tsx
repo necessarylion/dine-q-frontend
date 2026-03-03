@@ -24,6 +24,7 @@ import {
 import { useRestaurant } from "@/hooks/useRestaurant";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useDashboardInsights } from "@/hooks/useDashboardInsights";
+import { useRequireAISetting } from "@/hooks/useRequireAISetting";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ErrorCard } from "@/components/ErrorCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -92,6 +93,7 @@ export const DashboardPage = () => {
   const [insightsOpen, setInsightsOpen] = useState(false);
 
   const insightsMutation = useDashboardInsights();
+  const { requireAISetting } = useRequireAISetting();
 
   const currency = currentRestaurant?.currency || "USD";
 
@@ -165,8 +167,10 @@ export const DashboardPage = () => {
       }));
   }, [data?.bookings?.by_status]);
 
-  const handleGenerateInsights = () => {
+  const handleGenerateInsights = async () => {
     if (!currentRestaurant) return;
+    const allowed = await requireAISetting();
+    if (!allowed) return;
     setInsightsOpen(true);
     insightsMutation.mutate({
       restaurantId: currentRestaurant.id,
