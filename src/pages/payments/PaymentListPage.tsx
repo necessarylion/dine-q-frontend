@@ -163,10 +163,14 @@ export const PaymentListPage = () => {
                 >
                   <td className="px-4 py-3 text-muted-foreground">{payment.id}</td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex items-center gap-1.5">
-                      <HugeiconsIcon icon={TableRoundIcon} strokeWidth={2} className="size-4 text-muted-foreground" />
-                      {payment.table?.table_number || `#${payment.table_id}`}
-                    </span>
+                    {payment.table ? (
+                      <span className="inline-flex items-center gap-1.5">
+                        <HugeiconsIcon icon={TableRoundIcon} strokeWidth={2} className="size-4 text-muted-foreground" />
+                        {payment.table.table_number}
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-right">{formatPrice(payment.price_before_discount, currency)}</td>
                   <td className="px-4 py-3 text-right text-muted-foreground">
