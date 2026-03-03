@@ -3,9 +3,8 @@
  * Display all restaurants with create/edit/delete functionality
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "@tanstack/react-query";
 import { useRestaurants, useCreateRestaurant, useUpdateRestaurant, useDeleteRestaurant } from "@/hooks/useRestaurants";
 import { useRestaurant } from "@/hooks/useRestaurant";
 import { useAlertDialog } from "@/hooks/useAlertDialog";
@@ -26,13 +25,9 @@ import { PageHeader } from "@/components/layout/PageHeader";
 
 export const RestaurantListPage = () => {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const { data: restaurants = [], isLoading, error } = useRestaurants();
   const { currentRestaurant, setCurrentRestaurant } = useRestaurant();
 
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["restaurants"] });
-  }, [queryClient]);
   const createMutation = useCreateRestaurant();
   const updateMutation = useUpdateRestaurant();
   const deleteMutation = useDeleteRestaurant();
