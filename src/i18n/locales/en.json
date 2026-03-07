@@ -251,7 +251,14 @@
     "useAI": "Use AI",
     "useAITooltip": "AI generates name, description, and category",
     "generating": "Generating...",
-    "failedToGenerate": "Failed to generate description"
+    "failedToGenerate": "Failed to generate description",
+    "useImageFromUs": "Use image from Bing",
+    "imageSearchTitle": "Choose Images",
+    "imageSearchDescription": "Showing results for \"{{query}}\"",
+    "imageSearchNoResults": "No images found",
+    "imageSearchAdd": "Add {{count}} image(s)",
+    "imageSearchLoading": "Searching from Bing...",
+    "imageSearchAdding": "Adding..."
   },
   "category": {
     "title": "Categories",

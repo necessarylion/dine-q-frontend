@@ -285,6 +285,26 @@ export const useGenerateDescription = () => {
 };
 
 /**
+ * Search for images by query
+ */
+export const useImageSearch = (
+  restaurantId: number | undefined,
+  query: string,
+  limit: number = 10
+) => {
+  return useQuery({
+    queryKey: ["imageSearch", restaurantId, query, limit],
+    queryFn: () =>
+      api.get<{ images: string[]; query: string }>(
+        endpoints.menuItems.imageSearch(restaurantId!),
+        { params: { q: query, limit } }
+      ),
+    enabled: !!restaurantId && query.length > 0,
+    staleTime: 0,
+  });
+};
+
+/**
  * Delete a menu item
  */
 export const useDeleteMenuItem = () => {

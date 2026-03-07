@@ -251,7 +251,14 @@
     "useAI": "KI verwenden",
     "useAITooltip": "KI generiert Name, Beschreibung und Kategorie",
     "generating": "Generieren...",
-    "failedToGenerate": "Beschreibung konnte nicht generiert werden"
+    "failedToGenerate": "Beschreibung konnte nicht generiert werden",
+    "useImageFromUs": "Bilder von Bing verwenden",
+    "imageSearchTitle": "Bilder auswählen",
+    "imageSearchDescription": "Ergebnisse für \"{{query}}\"",
+    "imageSearchNoResults": "Keine Bilder gefunden",
+    "imageSearchAdd": "{{count}} Bild(er) hinzufügen",
+    "imageSearchLoading": "Suche bei Bing...",
+    "imageSearchAdding": "Hinzufügen..."
   },
   "category": {
     "title": "Kategorien",

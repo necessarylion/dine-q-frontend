@@ -66,6 +66,8 @@ export const endpoints = {
       `/restaurants/${restaurantId}/menu-items/${itemId}`,
     generateDescription: (restaurantId: number) =>
       `/restaurants/${restaurantId}/menu-items/generate-description`,
+    imageSearch: (restaurantId: number) =>
+      `/restaurants/${restaurantId}/image-search`,
   },
 
   zones: {

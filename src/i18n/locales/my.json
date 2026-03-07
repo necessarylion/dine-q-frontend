@@ -251,7 +251,14 @@
     "useAI": "AI သုံးမည်",
     "useAITooltip": "AI က အမည်၊ ဖော်ပြချက်နဲ့ အမျိုးအစား ရေးပေးမယ်",
     "generating": "ရေးနေတယ်...",
-    "failedToGenerate": "ဖော်ပြချက် ရေးမရပါ"
+    "failedToGenerate": "ဖော်ပြချက် ရေးမရပါ",
+    "useImageFromUs": "Bing မှ ပုံများကို သုံးမည်",
+    "imageSearchTitle": "ပုံများ ရွေးပါ",
+    "imageSearchDescription": "\"{{query}}\" အတွက် ရှာဖွေရလဒ်များ",
+    "imageSearchNoResults": "ပုံများ မတွေ့ပါ",
+    "imageSearchAdd": "ပုံ {{count}} ခု ထည့်မည်",
+    "imageSearchLoading": "Bing မှ ရှာဖွေနေသည်...",
+    "imageSearchAdding": "ထည့်နေသည်..."
   },
   "category": {
     "title": "အမျိုးအစားများ",

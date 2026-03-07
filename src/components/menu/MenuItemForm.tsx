@@ -38,7 +38,9 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Upload01Icon, Delete02Icon, AiMagicIcon } from "@hugeicons/core-free-icons";
 import { useGenerateDescription } from "@/hooks/useMenuItems";
+import bingLogo from "@/assets/bing.svg";
 import { useRequireAISetting } from "@/hooks/useRequireAISetting";
+import { ImageSearchDialog } from "@/components/menu/ImageSearchDialog";
 
 interface MenuItemFormProps {
   restaurantId: number;
@@ -124,6 +126,7 @@ export const MenuItemForm = ({
 
   const imagePreviews = allPreviews;
   const [isDragging, setIsDragging] = useState(false);
+  const [imageSearchOpen, setImageSearchOpen] = useState(false);
   const dragCounter = useRef(0);
 
   const acceptedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -324,6 +327,18 @@ export const MenuItemForm = ({
             />
           </label>
 
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="w-full"
+            disabled={!watch("name")}
+            onClick={() => setImageSearchOpen(true)}
+          >
+            <img src={bingLogo} alt="Bing" className="size-4" />
+            {t("menu.useImageFromUs")}
+          </Button>
+
           <p className="text-xs text-muted-foreground">
             {t("menu.imagesHint")}
           </p>
@@ -402,6 +417,14 @@ export const MenuItemForm = ({
           <TooltipContent>{t("menu.useAITooltip")}</TooltipContent>
         </Tooltip>
       </div>
+
+      <ImageSearchDialog
+        open={imageSearchOpen}
+        onOpenChange={setImageSearchOpen}
+        restaurantId={restaurantId}
+        query={watch("name") || ""}
+        onSelect={addFiles}
+      />
     </form>
   );
 };
